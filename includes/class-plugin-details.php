@@ -112,6 +112,15 @@ class AI_Woo_SA_Plugin_Details {
             <li><strong>⚡ Interaksi Instan ala ChatGPT:</strong> Teknologi <em>Server-Sent Events (SSE) Streaming</em> menghasilkan balasan kata demi kata secara instan tanpa jeda <em>loading</em> yang panjang.</li>
             <li><strong>🎨 Antarmuka (UI) Premium & Elegan:</strong> Desain <em>glassmorphism</em> yang mewah, dilengkapi dengan <em>Status Badges</em> berwarna untuk pelacakan pesanan (misal: Hijau untuk Selesai, Biru untuk Diproses).</li>
             <li><strong>🛡️ Human Fallback:</strong> Sistem memiliki sensor keluhan/frustrasi otomatis. Jika pengguna marah atau menanyakan hal di luar konteks toko, AI langsung mengarahkan percakapan ke Customer Service manusia.</li>
+            <li><strong>🔒 Enterprise-Grade Cyber Defense & Autonomous IP Firewall (Baru di v2.7.1):</strong> Sistem pertahanan siber multi-lapis untuk memproteksi toko, API, dan server dari serangan siber:
+                <ul>
+                    <li><em>Pre-flight Threat Inspection:</em> Pemindaian heuristik mendalam terhadap XSS, script injection (JS, PHP, Shell), manipulasi skema JSON / role spoofing, SQL Injection, Local File Inclusion (LFI), dan Server-Side Template Injection (SSTI) sebelum pesan diproses LLM.</li>
+                    <li><em>Anti-Social Engineering & Covenant Shield:</em> Menolak secara absolut segala upaya manipulasi, bujuk rayu, intimidasi, atau tipuan prompt injection yang berupaya mengekstrak API Key, kredensial database, atau rahasia server.</li>
+                    <li><em>Autonomous Strike-based IP Blacklisting:</em> Mesin akumulasi pelanggaran (strikes) yang otomatis memblokir alamat IP penyerang sementara maupun permanen secara seketika.</li>
+                    <li><em>Admin Security Firewall Hub:</em> Panel kontrol visual di WordPress Admin lengkap dengan metrik serangan real-time, data grid pemblokiran IP, pencarian, fitur unblock instan, dan proteksi admin self-lockout.</li>
+                    <li><em>Network & Protocol Hardening:</em> Proteksi Anti-CORS pada REST API, validasi SSRF pada koneksi Pinecone host, enkripsi sesi CSPRNG (<code>crypto.getRandomValues</code>), serta pembersihan data rahasia (secret scrubbing) otomatis pada stream SSE secara langsung.</li>
+                </ul>
+            </li>
         </ul>
 
         <h3>🔄 Bagaimana Sistem Ini Bekerja?</h3>
@@ -155,11 +164,33 @@ class AI_Woo_SA_Plugin_Details {
 
         <h3>Bagaimana privasi data pesanan pelanggan dijaga?</h3>
         <p>Modul pesanan memiliki verifikasi keamanan ketat. Data pesanan hanya akan diekstrak jika ID Pesanan cocok dengan ID Pengguna yang sedang <em>login</em>. Pengguna tamu (<em>guest</em>) akan diarahkan ke URL halaman pelacakan pesanan publik untuk keamanan.</p>
+
+        <h3>Bagaimana keamanan sistem terhadap manipulasi prompt dan serangan cyber?</h3>
+        <p><strong>Sangat aman dan terlindungi penuh.</strong> Sistem dilengkapi modul pertahanan <code>AI_Woo_SA_Security_Guard</code> yang aktif pada layer terluar sebelum input menyentuh model AI. Input divalidasi dari script injection, JSON role spoofing, SQLi, hingga LFI. Jika penyerang mencoba merayu atau memaksa AI membocorkan API Key atau database credentials, sistem langsung menolak dan otomatis memblokir IP penyerang tanpa menguras kuota token (Zero Token Waste).</p>
         ';
 
         // Build the HTML for the Changelog tab
         $changelog_html = '
         <h3>Changelog</h3>
+        <h4>v2.7.1 - Multi-Layer Cybersecurity & Autonomous IP Firewall</h4>
+        <ul>
+            <li><strong>Automated IP Firewall & Strike Engine:</strong> Pemblokiran IP otomatis berbasis akumulasi pelanggaran (strikes) dengan durasi blokir sementara maupun permanen untuk penyerang cyber.</li>
+            <li><strong>Deep Pre-flight Threat Inspection:</strong> Pemindaian real-time terhadap injeksi skrip (XSS, PHP, Bash), manipulasi payload JSON / role spoofing, SQL Injection, Path Traversal / LFI, dan Template Injection (SSTI).</li>
+            <li><strong>Social Engineering & Prompt Injection Covenant:</strong> Hardening prompt sistem untuk menolak secara absolut pembocoran API Key, kredensial database, atau rahasia server terhadap segala bentuk bujuk rayu, manipulasi, dan social engineering.</li>
+            <li><strong>Admin Security & Firewall Management:</strong> Tab baru "Security & IP Firewall" di dashboard admin dengan statistik ancaman live, tabel IP terblokir, pencarian IP, tools unblock/block manual, dan proteksi admin self-lockout.</li>
+            <li><strong>Network & Protocol Hardening:</strong> Validasi Anti-CORS pada REST API endpoint, proteksi SSRF pada koneksi Pinecone host, real-time secret redactor pada streaming SSE chunks, dan CSPRNG untuk ID sesi client.</li>
+        </ul>
+        <h4>v2.7.0 - Security Hardening & Zero-Token Dropper</h4>
+        <ul>
+            <li>Implementasi modul sentral <code>AI_Woo_SA_Security_Guard</code> di seluruh layer endpoint REST API dan admin.</li>
+            <li>Pencegahan pemborosan token (Zero Token Waste) dengan langsung memutus koneksi permintaan berbahaya di Layer 0.</li>
+            <li>Penambahan masking kata sandi dan sensor input API Key pada panel pengaturan WordPress Admin.</li>
+        </ul>
+        <h4>v2.6.8 - Core Stability & Connection Optimization</h4>
+        <ul>
+            <li>Optimasi cURL TCP Keep-Alive dan pemaksaan resolusi IPv4 untuk mencegah DNS timeout pada API Groq, Gemini, dan Pinecone.</li>
+            <li>Peningkatan efisiensi pembersihan berkala log percakapan via WordPress Cron.</li>
+        </ul>
         <h4>v2.5.2 - UI & Presentation Update</h4>
         <ul>
             <li>Added Native WordPress "View details" Modal for System Specifications.</li>
