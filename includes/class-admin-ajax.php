@@ -138,6 +138,12 @@ class AI_Woo_SA_Admin_Ajax {
             wp_send_json_error( array( 'message' => 'API Key atau Host URL kosong. Isi keduanya terlebih dahulu.' ) );
         }
 
+        // SSRF Protection: Ensure Host URL is HTTPS and belongs to pinecone.io
+        $ssrf_check = AI_Woo_SA_Security_Guard::validate_ssrf_url( $host_url, array( 'pinecone.io' ) );
+        if ( is_wp_error( $ssrf_check ) ) {
+            wp_send_json_error( array( 'message' => 'SSRF Terdeteksi: ' . $ssrf_check->get_error_message() ) );
+        }
+
         $url = rtrim( $host_url, '/' ) . '/describe_index_stats';
 
         $response = wp_remote_post( $url, array(
@@ -296,6 +302,10 @@ class AI_Woo_SA_Admin_Ajax {
 
         if ( empty( $ip ) || ! filter_var( $ip, FILTER_VALIDATE_IP ) ) {
             wp_send_json_error( array( 'message' => 'Format alamat IP tidak valid.' ) );
+        }
+
+        if ( $ip === AI_Woo_SA_Security_Guard::get_client_ip() ) {
+            wp_send_json_error( array( 'message' => 'Anda tidak dapat memblokir alamat IP Anda sendiri (Self-Lockout Protection).' ) );
         }
 
         $result = AI_Woo_SA_Security_Guard::block_ip( $ip, $reason, $hours );

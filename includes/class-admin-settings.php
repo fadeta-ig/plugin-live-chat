@@ -361,7 +361,8 @@ class AI_Woo_SA_Admin_Settings
         $val = isset($this->options['gemini_api_key']) ? $this->options['gemini_api_key'] : '';
         printf(
             '<div class="ai-woo-sa-api-row">
-                <input type="text" id="gemini_api_key" name="ai_woo_sa_settings[gemini_api_key]" value="%s" style="width: 300px;" />
+                <input type="password" id="gemini_api_key" name="ai_woo_sa_settings[gemini_api_key]" value="%s" style="width: 300px;" autocomplete="new-password" />
+                <button type="button" class="button button-secondary" onclick="var el=document.getElementById(\'gemini_api_key\'); el.type=(el.type===\'password\'?\'text\':\'password\');">👁️</button>
                 <button type="button" class="button button-secondary" id="ai-woo-sa-test-gemini">Test Connection</button>
                 <span id="ai-woo-sa-gemini-status" class="ai-woo-sa-status-box" style="display:none;"></span>
             </div>',
@@ -394,7 +395,8 @@ class AI_Woo_SA_Admin_Settings
         $val = isset($this->options['groq_api_key']) ? $this->options['groq_api_key'] : '';
         printf(
             '<div class="ai-woo-sa-api-row">
-                <input type="text" id="groq_api_key" name="ai_woo_sa_settings[groq_api_key]" value="%s" style="width: 300px;" />
+                <input type="password" id="groq_api_key" name="ai_woo_sa_settings[groq_api_key]" value="%s" style="width: 300px;" autocomplete="new-password" />
+                <button type="button" class="button button-secondary" onclick="var el=document.getElementById(\'groq_api_key\'); el.type=(el.type===\'password\'?\'text\':\'password\');">👁️</button>
                 <button type="button" class="button button-secondary" id="ai-woo-sa-test-groq">Test Connection</button>
                 <span id="ai-woo-sa-groq-status" class="ai-woo-sa-status-box" style="display:none;"></span>
             </div>',
@@ -425,7 +427,13 @@ class AI_Woo_SA_Admin_Settings
     public function pinecone_api_key_callback()
     {
         $val = isset($this->options['pinecone_api_key']) ? esc_attr($this->options['pinecone_api_key']) : '';
-        printf('<input type="text" id="pinecone_api_key" name="ai_woo_sa_settings[pinecone_api_key]" value="%s" class="regular-text" />', $val);
+        printf(
+            '<div class="ai-woo-sa-api-row">
+                <input type="password" id="pinecone_api_key" name="ai_woo_sa_settings[pinecone_api_key]" value="%s" style="width: 300px;" autocomplete="new-password" />
+                <button type="button" class="button button-secondary" onclick="var el=document.getElementById(\'pinecone_api_key\'); el.type=(el.type===\'password\'?\'text\':\'password\');">👁️</button>
+            </div>',
+            $val
+        );
     }
 
     public function pinecone_host_callback()

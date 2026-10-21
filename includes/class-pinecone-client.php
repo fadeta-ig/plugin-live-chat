@@ -15,7 +15,15 @@ class AI_Woo_SA_Pinecone_Client {
     public function __construct() {
         $options = get_option( 'ai_woo_sa_settings' );
         $this->api_key = isset( $options['pinecone_api_key'] ) ? $options['pinecone_api_key'] : '';
-        $this->host_url = isset( $options['pinecone_host'] ) ? rtrim( $options['pinecone_host'], '/' ) : '';
+        $raw_host = isset( $options['pinecone_host'] ) ? rtrim( $options['pinecone_host'], '/' ) : '';
+
+        // SSRF Guard: Enforce valid Pinecone HTTPS host
+        if ( ! empty( $raw_host ) && class_exists( 'AI_Woo_SA_Security_Guard' ) ) {
+            $ssrf = AI_Woo_SA_Security_Guard::validate_ssrf_url( $raw_host, array( 'pinecone.io' ) );
+            $this->host_url = is_wp_error( $ssrf ) ? '' : $raw_host;
+        } else {
+            $this->host_url = $raw_host;
+        }
     }
 
     /**

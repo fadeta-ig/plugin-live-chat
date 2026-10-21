@@ -42,6 +42,13 @@ class AI_Woo_SA_Chat_Handler {
         }
 
         // ============================================================
+        // SECURITY LAYER 0.1: Anti-CORS / Foreign Domain Siphoning Guard
+        // ============================================================
+        if ( ! AI_Woo_SA_Security_Guard::is_request_origin_allowed( $request ) ) {
+            return new WP_Error( 'cross_origin_forbidden', 'Akses dari domain luar tidak diizinkan.', array( 'status' => 403 ) );
+        }
+
+        // ============================================================
         // SECURITY LAYER 0.5: Strict Request Payload Schema Validation
         // ============================================================
         $raw_params = $request->get_json_params();

@@ -23,8 +23,14 @@ document.addEventListener('DOMContentLoaded', () => {
     const State = (() => {
         const getSessionId = () => {
             let sid = localStorage.getItem('ai_woo_sa_session_id');
-            if (!sid) {
-                sid = 'sess_' + Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+            if (!sid || !/^sess_[a-zA-Z0-9_-]{16,64}$/.test(sid)) {
+                if (window.crypto && window.crypto.getRandomValues) {
+                    const arr = new Uint8Array(16);
+                    window.crypto.getRandomValues(arr);
+                    sid = 'sess_' + Array.from(arr, b => b.toString(16).padStart(2, '0')).join('');
+                } else {
+                    sid = 'sess_' + Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+                }
                 localStorage.setItem('ai_woo_sa_session_id', sid);
             }
             return sid;

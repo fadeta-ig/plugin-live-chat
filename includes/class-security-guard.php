@@ -179,6 +179,11 @@ class AI_Woo_SA_Security_Guard {
             return false;
         }
 
+        // Prevent admin from accidentally blocking their own IP address (Self-Lockout Protection)
+        if ( is_user_logged_in() && current_user_can( 'manage_options' ) && $ip === self::get_client_ip() ) {
+            return false;
+        }
+
         $blocked = get_option( self::OPTION_BLOCKED_IPS, array() );
         if ( ! is_array( $blocked ) ) {
             $blocked = array();
@@ -488,5 +493,85 @@ class AI_Woo_SA_Security_Guard {
         $text = preg_replace( '/pcsk_[A-Za-z0-9_-]{35,}/', '[PROTECTED_API_KEY]', $text );
 
         return $text;
+    }
+
+    /**
+     * Validate an external URL against Server-Side Request Forgery (SSRF).
+     * Enforces HTTPS protocol, checks for allowed domains, and rejects private/loopback/cloud metadata IP addresses.
+     *
+     * @param string   $url             Target URL to validate.
+     * @param string[] $allowed_domains Whitelisted domain suffixes (e.g. ['pinecone.io']).
+     * @return true|WP_Error True if safe, WP_Error if SSRF detected.
+     */
+    public static function validate_ssrf_url( $url, $allowed_domains = array( 'pinecone.io' ) ) {
+        if ( empty( $url ) ) {
+            return new WP_Error( 'ssrf_empty_url', 'URL tidak boleh kosong.' );
+        }
+
+        $parsed = function_exists( 'wp_parse_url' ) ? wp_parse_url( $url ) : parse_url( $url );
+        if ( ! is_array( $parsed ) || empty( $parsed['scheme'] ) || empty( $parsed['host'] ) ) {
+            return new WP_Error( 'ssrf_invalid_url', 'Format URL tidak valid.' );
+        }
+
+        // 1. Strict HTTPS only
+        if ( strtolower( $parsed['scheme'] ) !== 'https' ) {
+            return new WP_Error( 'ssrf_insecure_scheme', 'Hanya protokol HTTPS aman yang diizinkan.' );
+        }
+
+        $host = strtolower( $parsed['host'] );
+
+        // 2. Reject raw IP addresses in hostname
+        if ( filter_var( $host, FILTER_VALIDATE_IP ) ) {
+            return new WP_Error( 'ssrf_ip_forbidden', 'Penggunaan alamat IP mentah tidak diizinkan.' );
+        }
+
+        // 3. Domain suffix whitelist validation
+        $domain_matched = false;
+        foreach ( $allowed_domains as $allowed ) {
+            if ( $host === $allowed || str_ends_with( $host, '.' . $allowed ) ) {
+                $domain_matched = true;
+                break;
+            }
+        }
+
+        if ( ! $domain_matched ) {
+            return new WP_Error( 'ssrf_unauthorized_domain', "Domain '{$host}' tidak termasuk dalam daftar domain tepercaya yang diizinkan." );
+        }
+
+        return true;
+    }
+
+    /**
+     * Verify that incoming chat REST API requests originate from the legitimate site origin (Anti-CORS / Anti-DoW).
+     *
+     * @param WP_REST_Request $request REST request object.
+     * @return bool True if allowed, false if foreign origin blocked.
+     */
+    public static function is_request_origin_allowed( $request ) {
+        $origin  = $request->get_header( 'origin' );
+        $referer = $request->get_header( 'referer' );
+
+        $site_host = function_exists( 'wp_parse_url' ) ? wp_parse_url( home_url(), PHP_URL_HOST ) : parse_url( home_url(), PHP_URL_HOST );
+        if ( empty( $site_host ) ) {
+            return true;
+        }
+
+        // Check Origin header if present
+        if ( ! empty( $origin ) ) {
+            $origin_host = function_exists( 'wp_parse_url' ) ? wp_parse_url( $origin, PHP_URL_HOST ) : parse_url( $origin, PHP_URL_HOST );
+            if ( ! empty( $origin_host ) && strtolower( $origin_host ) !== strtolower( $site_host ) && ! in_array( $origin_host, array( 'localhost', '127.0.0.1' ), true ) ) {
+                return false;
+            }
+        }
+
+        // Check Referer header if present
+        if ( ! empty( $referer ) ) {
+            $referer_host = function_exists( 'wp_parse_url' ) ? wp_parse_url( $referer, PHP_URL_HOST ) : parse_url( $referer, PHP_URL_HOST );
+            if ( ! empty( $referer_host ) && strtolower( $referer_host ) !== strtolower( $site_host ) && ! in_array( $referer_host, array( 'localhost', '127.0.0.1' ), true ) ) {
+                return false;
+            }
+        }
+
+        return true;
     }
 }

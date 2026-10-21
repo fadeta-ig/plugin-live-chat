@@ -150,7 +150,10 @@ class AI_Woo_SA_Groq_Client {
                 ) );
                 echo "data: {$fallback_payload}\n\n";
             } else {
-                echo $data;
+                $sanitized_data = class_exists( 'AI_Woo_SA_Security_Guard' )
+                    ? AI_Woo_SA_Security_Guard::sanitize_outgoing_response( $data )
+                    : $data;
+                echo $sanitized_data;
             }
 
             if ( ob_get_level() > 0 ) {
