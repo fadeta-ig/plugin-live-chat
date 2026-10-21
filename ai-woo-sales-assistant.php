@@ -11,7 +11,7 @@ if (!defined('ABSPATH')) {
     exit; // Exit if accessed directly.
 }
 
-define('AI_WOO_SA_VERSION', '2.6.8');
+define('AI_WOO_SA_VERSION', '2.7.0');
 define('AI_WOO_SA_PLUGIN_DIR', plugin_dir_path(__FILE__));
 define('AI_WOO_SA_PLUGIN_URL', plugin_dir_url(__FILE__));
 
