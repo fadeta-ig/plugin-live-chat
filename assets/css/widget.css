@@ -1,0 +1,739 @@
+/* 
+ * AI WooCommerce Sales Assistant - Widget Styles
+ * Scoped to #ai-woo-sa-widget-root to prevent conflicts
+ */
+
+ @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600&display=swap');
+
+ #ai-woo-sa-widget-root {
+     --primary-color: #8C9B81; /* Sage Green */
+     --primary-color-hover: #7B8B6F;
+     --text-color: #2C3524;
+     --text-light: #7A8574;
+     --bg-light: #F9FAF8;
+     --white: #FFFFFF;
+     --border-color: #E2E5DF;
+     --accent-color: #5A6B4F;
+     --accent-hover: #45523C;
+     --shadow-lg: 0 4px 12px rgba(0, 0, 0, 0.05);
+     --shadow-xl: 0 8px 24px rgba(0, 0, 0, 0.08);
+     
+     font-family: 'Outfit', system-ui, -apple-system, sans-serif;
+     font-size: 14px;
+     line-height: 1.5;
+     color: var(--text-color);
+     position: fixed;
+     bottom: 24px;
+     right: 24px;
+     z-index: 999999;
+     pointer-events: none; /* Let clicks pass through the root container */
+ }
+ 
+ #ai-woo-sa-widget-root * {
+     box-sizing: border-box;
+ }
+ 
+ /* Floating Button */
+ .ai-woo-sa-fab {
+     pointer-events: auto;
+     width: 60px;
+     height: 60px;
+     background-color: var(--primary-color);
+     color: var(--white);
+     border-radius: 50%;
+     display: flex;
+     align-items: center;
+     justify-content: center;
+     cursor: pointer;
+     box-shadow: var(--shadow-lg);
+     transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), background-color 0.2s ease;
+     border: none;
+     position: absolute;
+     bottom: 0;
+     right: 0;
+ }
+ 
+ .ai-woo-sa-fab:hover {
+     transform: scale(1.05);
+     background-color: var(--primary-color-hover);
+ }
+ 
+ .ai-woo-sa-fab svg {
+     width: 28px;
+     height: 28px;
+     fill: currentColor;
+ }
+ 
+ /* Chat Window (Glassmorphism) */
+ .ai-woo-sa-chat-window {
+     pointer-events: auto;
+     position: absolute;
+     bottom: 80px;
+     right: 0;
+     width: 380px;
+     max-width: calc(100vw - 48px);
+     height: 600px;
+     max-height: calc(100vh - 120px);
+     background: var(--white);
+     border: 1px solid var(--border-color);
+     border-radius: 16px;
+     box-shadow: var(--shadow-xl);
+     display: flex;
+     flex-direction: column;
+     overflow: hidden;
+     opacity: 0;
+     transform: translateY(20px) scale(0.95);
+     transform-origin: bottom right;
+     transition: opacity 0.3s ease, transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+     visibility: hidden;
+ }
+ 
+ .ai-woo-sa-chat-window.open {
+     opacity: 1;
+     transform: translateY(0) scale(1);
+     visibility: visible;
+ }
+ 
+ /* Header */
+ .ai-woo-sa-header {
+     background: var(--primary-color);
+     color: var(--white);
+     padding: 18px 20px;
+     display: flex;
+     justify-content: space-between;
+     align-items: center;
+ }
+ 
+ .ai-woo-sa-header h3 {
+     margin: 0;
+     font-size: 16px;
+     font-weight: 600;
+     color: var(--white);
+ }
+ 
+ .ai-woo-sa-header-status {
+     font-size: 12px;
+     opacity: 0.8;
+     display: flex;
+     align-items: center;
+     gap: 6px;
+ }
+ 
+ .ai-woo-sa-status-dot {
+     width: 8px;
+     height: 8px;
+     background-color: #10B981; /* Emerald 500 */
+     border-radius: 50%;
+     display: inline-block;
+ }
+ 
+ .ai-woo-sa-close {
+     background: transparent;
+     border: none;
+     color: var(--white);
+     cursor: pointer;
+     opacity: 0.7;
+     transition: opacity 0.2s;
+     padding: 4px;
+ }
+ 
+ .ai-woo-sa-close:hover,
+ .ai-woo-sa-reset:hover {
+     opacity: 1;
+ }
+ 
+ /* Body / Message Area */
+ .ai-woo-sa-body {
+     flex: 1;
+     padding: 20px;
+     overflow-y: auto;
+     display: flex;
+     flex-direction: column;
+     gap: 16px;
+     scroll-behavior: smooth;
+ }
+ 
+ .ai-woo-sa-body::-webkit-scrollbar {
+     width: 6px;
+ }
+ 
+ .ai-woo-sa-body::-webkit-scrollbar-thumb {
+     background: rgba(0,0,0,0.1);
+     border-radius: 10px;
+ }
+ 
+ /* Message Bubbles */
+ .ai-woo-sa-msg {
+     max-width: 85%;
+     padding: 12px 16px;
+     border-radius: 16px;
+     animation: aiWooSaFadeInUp 0.3s ease;
+ }
+ 
+ @keyframes aiWooSaFadeInUp {
+     from { opacity: 0; transform: translateY(10px); }
+     to { opacity: 1; transform: translateY(0); }
+ }
+ 
+ .ai-woo-sa-msg.bot {
+     align-self: flex-start;
+     background-color: var(--bg-light);
+     border: 1px solid var(--border-color);
+     border-bottom-left-radius: 4px;
+     color: var(--text-color);
+ }
+ 
+ .ai-woo-sa-msg.user {
+     align-self: flex-end;
+     background-color: var(--primary-color);
+     color: var(--white);
+     border-bottom-right-radius: 4px;
+ }
+ 
+ .ai-woo-sa-msg p {
+     margin: 0 0 8px 0;
+ }
+ .ai-woo-sa-msg p:last-child {
+     margin: 0;
+ }
+ 
+ /* Product Card CTA */
+ .ai-woo-sa-product-card {
+     background: var(--white);
+     border: 1px solid var(--border-color);
+     border-radius: 12px;
+     padding: 12px;
+     margin-top: 12px;
+     display: flex;
+     flex-direction: column;
+     gap: 8px;
+ }
+ 
+ .ai-woo-sa-product-image {
+     width: 100%;
+     height: 120px;
+     object-fit: cover;
+     border-radius: 8px;
+     margin-bottom: 4px;
+     border: 1px solid var(--border-color);
+ }
+ 
+ .ai-woo-sa-product-title {
+     font-weight: 600;
+     color: var(--primary-color);
+     font-size: 14px;
+ }
+ 
+ .ai-woo-sa-product-price {
+     color: var(--accent-color);
+     font-weight: 500;
+ }
+ 
+ .ai-woo-sa-product-actions {
+     display: flex;
+     gap: 8px;
+ }
+
+ .ai-woo-sa-btn-cart {
+     flex: 1;
+     display: inline-flex;
+     align-items: center;
+     justify-content: center;
+     gap: 4px;
+     background-color: var(--primary-color);
+     color: var(--white);
+     padding: 10px 12px;
+     border-radius: 8px;
+     border: none;
+     font-family: inherit;
+     font-size: 13px;
+     font-weight: 500;
+     cursor: pointer;
+     transition: background-color 0.2s, transform 0.1s;
+ }
+
+ .ai-woo-sa-btn-cart:hover:not(:disabled) {
+     background-color: var(--primary-color-hover);
+     transform: scale(1.02);
+ }
+
+ .ai-woo-sa-btn-cart:disabled {
+     opacity: 0.7;
+     cursor: not-allowed;
+ }
+
+ .ai-woo-sa-btn-cart.added {
+     background-color: var(--accent-color);
+     cursor: default;
+ }
+
+ .ai-woo-sa-btn-spinner {
+     display: inline-block;
+     width: 12px;
+     height: 12px;
+     border: 2px solid rgba(255, 255, 255, 0.4);
+     border-top-color: var(--white);
+     border-radius: 50%;
+     animation: aiWooSaSpin 0.6s linear infinite;
+ }
+
+ @keyframes aiWooSaSpin {
+     to { transform: rotate(360deg); }
+ }
+
+ .ai-woo-sa-btn-link {
+     display: inline-flex;
+     align-items: center;
+     justify-content: center;
+     padding: 10px 12px;
+     border-radius: 8px;
+     border: 1px solid var(--border-color);
+     background: transparent;
+     color: var(--text-color);
+     text-decoration: none;
+     font-size: 13px;
+     font-weight: 500;
+     transition: border-color 0.2s, background-color 0.2s;
+ }
+
+ .ai-woo-sa-btn-link:hover {
+     border-color: var(--primary-color);
+     background-color: var(--bg-light);
+     color: var(--primary-color);
+ }
+
+ .ai-woo-sa-btn-wa {
+     display: block;
+     text-align: center;
+     background-color: #25D366;
+     color: white;
+     padding: 10px;
+     border-radius: 8px;
+     text-decoration: none;
+     font-weight: 500;
+     transition: background-color 0.2s;
+ }
+ .ai-woo-sa-btn-wa:hover {
+     background-color: #128C7E;
+     color: white;
+ }
+ 
+ /* Input Area */
+ .ai-woo-sa-footer {
+     padding: 16px;
+     background: var(--white);
+     border-top: 1px solid var(--border-color);
+     display: flex;
+     gap: 8px;
+ }
+ 
+ .ai-woo-sa-input {
+     flex: 1;
+     border: 1px solid var(--border-color);
+     border-radius: 24px;
+     padding: 12px 16px;
+     font-family: inherit;
+     font-size: 14px;
+     outline: none;
+     background: var(--bg-light);
+     transition: border-color 0.2s, background-color 0.2s;
+ }
+ 
+ .ai-woo-sa-input:focus {
+     border-color: var(--primary-color);
+     background: var(--white);
+ }
+ 
+ .ai-woo-sa-send {
+     background: var(--primary-color);
+     color: var(--white);
+     border: none;
+     border-radius: 50%;
+     width: 44px;
+     height: 44px;
+     display: flex;
+     align-items: center;
+     justify-content: center;
+     cursor: pointer;
+     transition: transform 0.2s, background-color 0.2s;
+ }
+ 
+ .ai-woo-sa-send:hover {
+     background-color: var(--primary-color-hover);
+     transform: scale(1.05);
+ }
+ 
+ .ai-woo-sa-send svg {
+     width: 18px;
+     height: 18px;
+     fill: currentColor;
+     margin-left: 2px;
+ }
+ 
+ /* Loading Dots */
+ .ai-woo-sa-typing {
+     display: flex;
+     gap: 4px;
+     padding: 8px 12px;
+ }
+ 
+ .ai-woo-sa-dot {
+     width: 6px;
+     height: 6px;
+     background: var(--text-light);
+     border-radius: 50%;
+     animation: aiWooSaBounce 1.4s infinite ease-in-out both;
+ }
+ 
+ .ai-woo-sa-dot:nth-child(1) { animation-delay: -0.32s; }
+ .ai-woo-sa-dot:nth-child(2) { animation-delay: -0.16s; }
+ 
+ @keyframes aiWooSaBounce {
+     0%, 80%, 100% { transform: scale(0); }
+     40% { transform: scale(1); }
+ }
+
+ /* Quick Reply Buttons */
+ .ai-woo-sa-quick-replies {
+     display: flex;
+     flex-wrap: wrap;
+     gap: 8px;
+     padding: 4px 0;
+     animation: aiWooSaFadeInUp 0.3s ease;
+ }
+
+ .ai-woo-sa-qr-btn {
+     padding: 8px 14px;
+     border: 1px solid var(--primary-color);
+     border-radius: 20px;
+     background: transparent;
+     color: var(--primary-color);
+     font-family: inherit;
+     font-size: 13px;
+     font-weight: 500;
+     cursor: pointer;
+     transition: all 0.2s ease;
+     white-space: nowrap;
+ }
+
+ .ai-woo-sa-qr-btn:hover {
+     background: var(--primary-color);
+     color: var(--white);
+     transform: translateY(-1px);
+ }
+
+ .ai-woo-sa-qr-btn:active {
+     transform: scale(0.96);
+ }
+
+ /* Order Card */
+ .ai-woo-sa-order-card {
+     background: var(--white);
+     border: 1px solid var(--border-color);
+     border-radius: 12px;
+     padding: 14px;
+     margin-top: 12px;
+     display: flex;
+     flex-direction: column;
+     gap: 8px;
+     animation: aiWooSaFadeInUp 0.3s ease;
+ }
+
+ .ai-woo-sa-order-header {
+     display: flex;
+     justify-content: space-between;
+     align-items: center;
+     gap: 8px;
+ }
+
+ .ai-woo-sa-order-number {
+     font-weight: 600;
+     font-size: 14px;
+     color: var(--text-color);
+ }
+
+ .ai-woo-sa-order-status {
+     font-size: 11px;
+     font-weight: 600;
+     padding: 3px 10px;
+     border-radius: 20px;
+     white-space: nowrap;
+ }
+
+ .ai-woo-sa-order-status.status-completed { background: #ECFDF5; color: #065F46; }
+ .ai-woo-sa-order-status.status-processing { background: #EFF6FF; color: #1E40AF; }
+ .ai-woo-sa-order-status.status-shipped { background: #F0F9FF; color: #0369A1; }
+ .ai-woo-sa-order-status.status-on-hold { background: #FFFBEB; color: #92400E; }
+ .ai-woo-sa-order-status.status-pending { background: #FFF7ED; color: #9A3412; }
+ .ai-woo-sa-order-status.status-cancelled { background: #FEF2F2; color: #991B1B; }
+ .ai-woo-sa-order-status.status-refunded { background: #F5F3FF; color: #5B21B6; }
+ .ai-woo-sa-order-status.status-default { background: var(--bg-light); color: var(--text-light); }
+
+ .ai-woo-sa-order-date {
+     font-size: 12px;
+     color: var(--text-light);
+ }
+
+ .ai-woo-sa-order-items {
+     padding: 8px 0;
+     border-top: 1px solid var(--border-color);
+     border-bottom: 1px solid var(--border-color);
+ }
+
+ .ai-woo-sa-order-item {
+     font-size: 13px;
+     color: var(--text-color);
+     padding: 2px 0;
+     display: flex;
+     justify-content: space-between;
+     gap: 8px;
+ }
+
+ .ai-woo-sa-order-item-price {
+     color: var(--accent-color);
+     font-weight: 500;
+     white-space: nowrap;
+ }
+
+ .ai-woo-sa-order-tracking {
+     display: flex;
+     justify-content: space-between;
+     align-items: center;
+     padding: 6px 10px;
+     background: var(--bg-light);
+     border-radius: 8px;
+     font-size: 12px;
+ }
+
+ .ai-woo-sa-tracking-label {
+     font-weight: 600;
+     color: var(--text-color);
+ }
+
+ .ai-woo-sa-tracking-number {
+     font-family: 'Courier New', monospace;
+     font-weight: 600;
+     color: var(--primary-color);
+     letter-spacing: 0.5px;
+ }
+
+ .ai-woo-sa-order-shipping-status {
+     font-size: 12px;
+     color: var(--accent-color);
+     font-weight: 500;
+ }
+
+ .ai-woo-sa-order-total {
+     font-size: 14px;
+     color: var(--text-color);
+     text-align: right;
+ }
+
+ .ai-woo-sa-btn-tracking {
+     display: block;
+     text-align: center;
+     background-color: var(--primary-color);
+     color: white;
+     padding: 10px;
+     border-radius: 8px;
+     text-decoration: none;
+     font-weight: 500;
+     transition: background-color 0.2s;
+ }
+
+ .ai-woo-sa-btn-tracking:hover {
+     background-color: var(--primary-color-hover);
+     color: white;
+ }
+
+ /* --- C5: Unread Message Badge --- */
+ .ai-woo-sa-badge {
+     position: absolute;
+     top: -2px;
+     right: -2px;
+     background: #ff4757;
+     color: white;
+     font-size: 11px;
+     font-weight: 700;
+     padding: 2px 6px;
+     border-radius: 12px;
+     box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+     min-width: 20px;
+     height: 20px;
+     display: flex;
+     align-items: center;
+     justify-content: center;
+     animation: pulse-badge 2s infinite;
+ }
+ @keyframes pulse-badge {
+     0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255, 71, 87, 0.7); }
+     70% { transform: scale(1.1); box-shadow: 0 0 0 6px rgba(255, 71, 87, 0); }
+     100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255, 71, 87, 0); }
+ }
+
+ /* --- D2: Message Timestamps --- */
+ .ai-woo-sa-time {
+     display: block;
+     font-size: 10px;
+     opacity: 0.5;
+     margin-top: 4px;
+     text-align: right;
+ }
+
+ /* --- D4: FAB Morph Animation --- */
+ .ai-woo-sa-fab svg {
+     transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.3s ease;
+ }
+ .ai-woo-sa-fab.open svg {
+     transform: rotate(90deg) scale(0.5);
+     opacity: 0;
+ }
+ .ai-woo-sa-fab::after {
+     content: "✕";
+     position: absolute;
+     font-size: 24px;
+     font-weight: 300;
+     opacity: 0;
+     transform: rotate(-90deg) scale(0.5);
+     transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.3s ease;
+ }
+ .ai-woo-sa-fab.open::after {
+     opacity: 1;
+     transform: rotate(0deg) scale(1);
+ }
+
+ /* --- D1: Mobile Fullscreen Responsiveness --- */
+ @media (max-width: 480px) {
+     .ai-woo-sa-chat-window {
+         position: fixed !important;
+         top: 0 !important;
+         left: 0 !important;
+         right: 0 !important;
+         bottom: 0 !important;
+         width: 100vw !important;
+         height: 100dvh !important;
+         max-height: none;
+         max-width: none;
+         border-radius: 0;
+         border: none;
+         margin: 0;
+     }
+     .ai-woo-sa-header {
+         padding-top: calc(16px + env(safe-area-inset-top));
+         border-radius: 0;
+     }
+     .ai-woo-sa-footer {
+         padding-bottom: calc(16px + env(safe-area-inset-bottom));
+         position: sticky;
+         bottom: 0;
+     }
+     .ai-woo-sa-fab {
+         bottom: 16px;
+         right: 16px;
+     }
+     /* Sembunyikan FAB di mobile ketika chat terbuka karena menumpuk dengan layar penuh */
+     .ai-woo-sa-fab.open {
+         display: none !important;
+     }
+ }
+
+ /* --- Custom Confirm Modal --- */
+ .ai-woo-sa-confirm-overlay {
+     position: fixed;
+     top: 0;
+     left: 0;
+     width: 100vw;
+     height: 100vh;
+     background: rgba(0, 0, 0, 0.5);
+     backdrop-filter: blur(8px);
+     z-index: 9999999;
+     display: flex;
+     align-items: center;
+     justify-content: center;
+     opacity: 0;
+     visibility: hidden;
+     transition: opacity 0.3s ease, visibility 0.3s ease;
+     border-radius: 0;
+     pointer-events: auto; /* Fix: Makes overlay and buttons clickable */
+ }
+ 
+ .ai-woo-sa-confirm-overlay.show {
+     opacity: 1;
+     visibility: visible;
+ }
+ 
+ .ai-woo-sa-confirm-box {
+     background: var(--white);
+     padding: 24px 28px;
+     border-radius: 20px;
+     width: 85%;
+     max-width: 340px;
+     box-shadow: 0 10px 40px rgba(0,0,0,0.12);
+     text-align: center;
+     transform: scale(0.95) translateY(10px);
+     transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+ }
+ 
+ .ai-woo-sa-confirm-overlay.show .ai-woo-sa-confirm-box {
+     transform: scale(1) translateY(0);
+ }
+ 
+ .ai-woo-sa-confirm-box h4 {
+     margin: 0 0 12px 0;
+     color: var(--text-color);
+     font-size: 18px;
+     font-weight: 600;
+     letter-spacing: -0.3px;
+ }
+ 
+ .ai-woo-sa-confirm-box p {
+     margin: 0 0 24px 0;
+     color: #64748b;
+     font-size: 14px;
+     line-height: 1.5;
+ }
+ 
+ .ai-woo-sa-confirm-actions {
+     display: flex;
+     gap: 12px;
+     justify-content: center;
+ }
+ 
+ .ai-woo-sa-confirm-btn {
+     flex: 1;
+     padding: 10px 20px;
+     border-radius: 99px;
+     font-family: inherit;
+     font-size: 14px;
+     font-weight: 600;
+     cursor: pointer;
+     border: none;
+     transition: all 0.2s ease;
+ }
+ 
+ .ai-woo-sa-confirm-btn.cancel {
+     background: transparent;
+     color: #64748b;
+     border: 1px solid #cbd5e1;
+ }
+ 
+ .ai-woo-sa-confirm-btn.cancel:hover {
+     background: #f8fafc;
+     color: var(--text-color);
+ }
+ 
+ .ai-woo-sa-confirm-btn.confirm {
+     background: #ef4444;
+     color: white;
+     box-shadow: 0 4px 12px rgba(239, 68, 68, 0.25);
+ }
+ 
+ .ai-woo-sa-confirm-btn.confirm:hover {
+     background: #dc2626;
+     transform: translateY(-1px);
+     box-shadow: 0 6px 16px rgba(239, 68, 68, 0.3);
+ }
+ 
+ .ai-woo-sa-confirm-btn.confirm:active {
+     transform: translateY(0);
+ }
