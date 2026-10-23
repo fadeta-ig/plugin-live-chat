@@ -89,7 +89,7 @@ class AI_Woo_SA_Admin_Ajax {
 
         $url = 'https://api.groq.com/openai/v1/chat/completions';
         $body = array(
-            'model'    => 'llama-3.1-8b-instant',
+            'model'    => 'openai/gpt-oss-20b',
             'messages' => array( array( 'role' => 'user', 'content' => 'Reply only with OK' ) ),
             'max_tokens' => 5
         );

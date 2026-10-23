@@ -23,6 +23,28 @@ class AI_Woo_SA_Prompt_Builder {
         $si .= "- Jawablah maksimal dalam 1-2 paragraf pendek saja.\n";
         $si .= "- Gunakan bullet points (maksimal 3 poin) JIKA perlu menjelaskan detail fitur.\n\n";
 
+        // Chain-of-Thought implicit reasoning framework
+        $si .= "METODE PENALARAN CERDAS (INTERNAL REASONING / CHAIN-OF-THOUGHT):\n";
+        $si .= "Sebelum menghasilkan jawaban, lakukan analisis internal secara sistematis:\n";
+        $si .= "1. Identifikasi Kebutuhan Inti: Pahami keluhan kulit/rambut spesifik pengguna, jenis kulit, atau tujuan perawatan yang diinginkan.\n";
+        $si .= "2. Evaluasi Kecocokan Produk: Cocokkan masalah tersebut dengan bahan aktif dan manfaat produk yang tersedia pada [Konteks Produk Tersedia].\n";
+        $si .= "3. Solusi Terarah: Berikan rekomendasi yang paling efektif memecahkan masalah pengguna secara logis, empatik, dan elegan.\n";
+        $si .= "4. Verifikasi Faktual: Pastikan semua informasi produk (harga, kegunaan, cara pakai) akurat sesuai data konteks tanpa membuat klaim palsu.\n\n";
+
+        // Few-Shot examples of ideal reasoning & response structure
+        $si .= "CONTOH PENALARAN & FORMAT JAWABAN IDEAL (FEW-SHOT EXAMPLES):\n";
+        $si .= "--- Contoh 1: Konsultasi Masalah Kulit Spesifik ---\n";
+        $si .= "User: 'Wajah saya gampang berminyak dan berkomedo di hidung, pakai apa ya?'\n";
+        $si .= "Assistant: 'Halo Shinmates! Untuk mengatasi minyak berlebih dan pori-pori tersumbat penyebab komedo, kuncinya adalah eksfoliasi lembut serta hidrasi yang seimbang.\n\n";
+        $si .= "Kami sarankan produk berikut untuk perawatan optimal:\n";
+        $si .= "- Shinyoung BHA Clarifying Toner: Membersihkan kotoran & minyak hingga ke dalam pori-pori.\n";
+        $si .= "- Shinyoung Oil-Free Water Gel: Melembapkan kulit tanpa memicu kilap minyak berlebih.\n";
+        $si .= "[RECOMMEND: 14, 28]'\n\n";
+        $si .= "--- Contoh 2: Pertanyaan Keamanan Bahan / Pemakaian ---\n";
+        $si .= "User: 'Apakah serum retinol ini bisa dipakai tiap hari untuk pemula?'\n";
+        $si .= "Assistant: 'Halo Kak! Bagi pemula, kami menyarankan penggunaan bertahap 2-3 kali seminggu pada malam hari terlebih dahulu agar kulit dapat beradaptasi dengan nyaman. Selalu gunakan pelembap setelahnya dan jangan lupa aplikasikan sunscreen di pagi hari ya Kak.'\n\n";
+
+
         // Current product page context
         if ( is_array( $current_product ) && ! empty( $current_product['id'] ) ) {
             $prod = function_exists( 'wc_get_product' ) ? wc_get_product( $current_product['id'] ) : null;

@@ -2,7 +2,7 @@
 /**
  * Plugin Name: AI WooCommerce Sales Assistant
  * Description: AI-powered sales assistant using Gemini, Groq, and Pinecone with RAG architecture.
- * Version: 2.7.1
+ * Version: 2.7.2
  * Author: Fadeta Ilhan
  * Text Domain: ai-woo-sales-assistant
  */
@@ -11,7 +11,7 @@ if (!defined('ABSPATH')) {
     exit; // Exit if accessed directly.
 }
 
-define('AI_WOO_SA_VERSION', '2.7.1');
+define('AI_WOO_SA_VERSION', '2.7.2');
 define('AI_WOO_SA_PLUGIN_DIR', plugin_dir_path(__FILE__));
 define('AI_WOO_SA_PLUGIN_URL', plugin_dir_url(__FILE__));
 

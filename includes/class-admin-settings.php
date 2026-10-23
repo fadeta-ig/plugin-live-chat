@@ -346,7 +346,7 @@ class AI_Woo_SA_Admin_Settings
         $val = isset($this->options['llm_provider']) ? $this->options['llm_provider'] : 'gemini';
         $providers = array(
             'gemini' => 'Gemini (Default)',
-            'groq' => 'Groq (Sangat Cepat - Llama 3)'
+            'groq' => 'Groq (Sangat Cepat - GPT-OSS / Llama 4)'
         );
         echo '<select id="llm_provider" name="ai_woo_sa_settings[llm_provider]" style="font-weight:bold; color:#2c3e50;">';
         foreach ($providers as $key => $label) {
@@ -407,13 +407,12 @@ class AI_Woo_SA_Admin_Settings
 
     public function groq_model_callback()
     {
-        $val = isset($this->options['groq_model']) ? $this->options['groq_model'] : 'llama-3.3-70b-versatile';
+        $val = isset($this->options['groq_model']) ? $this->options['groq_model'] : 'openai/gpt-oss-120b';
         $models = array(
-            'llama-3.3-70b-versatile' => 'Llama 3.3 70B (Sangat Cerdas, Default)',
-            'llama-3.1-70b-versatile' => 'Llama 3.1 70B (Alternatif)',
-            'llama-3.1-8b-instant' => 'Llama 3.1 8B (Cepat & Ringan)',
-            'mixtral-8x7b-32768' => 'Mixtral 8x7B (Konteks Panjang)',
-            'gemma2-9b-it' => 'Gemma 2 9B IT'
+            'openai/gpt-oss-120b' => 'GPT-OSS 120B (Flagship — Penalaran Cerdas & Rekomendasi Akurat)',
+            'openai/gpt-oss-20b' => 'GPT-OSS 20B (Ultra Cepat ~1000 tok/s — Ringan & Responsif)',
+            'meta-llama/llama-4-scout-17b-16e-instruct' => 'Llama 4 Scout 17B (Multimodal MoE)',
+            'qwen/qwen3.8-27b' => 'Qwen 3.8 27B (Penalaran Multilingual & Komprehensif)',
         );
 
         echo '<select id="groq_model" name="ai_woo_sa_settings[groq_model]">';
@@ -421,7 +420,7 @@ class AI_Woo_SA_Admin_Settings
             printf('<option value="%s" %s>%s</option>', esc_attr($key), selected($val, $key, false), esc_html($label));
         }
         echo '</select>';
-        echo '<p class="description">Pilih model yang akan digunakan jika Provider di atas adalah Groq.</p>';
+        echo '<p class="description">Pilih model Groq untuk AI Chat Assistant. Rekomendasi: <strong>GPT-OSS 120B</strong> untuk penalaran konsultasi terbaik dan paling cerdas.</p>';
     }
 
     public function pinecone_api_key_callback()

@@ -3,7 +3,7 @@
  * Groq API Client Class
  * 
  * Handles communication with Groq API (OpenAI compatible endpoint).
- * Used specifically for chat generation to leverage Llama 3 speed.
+ * Used specifically for chat generation to leverage Groq LPU high-speed inference.
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -19,7 +19,7 @@ class AI_Woo_SA_Groq_Client {
     public function __construct() {
         $options = get_option( 'ai_woo_sa_settings' );
         $this->api_key = isset( $options['groq_api_key'] ) ? $options['groq_api_key'] : '';
-        $this->model   = isset( $options['groq_model'] ) ? $options['groq_model'] : 'llama-3.3-70b-versatile';
+        $this->model   = isset( $options['groq_model'] ) ? $options['groq_model'] : 'openai/gpt-oss-120b';
     }
 
     /**
@@ -59,9 +59,9 @@ class AI_Woo_SA_Groq_Client {
         $body = array(
             'model'       => $this->model,
             'messages'    => $messages,
-            'temperature' => 0.2,
-            'max_tokens'  => 1024,
-            'top_p'       => 0.90
+            'temperature' => 0.3,
+            'max_tokens'  => 1536,
+            'top_p'       => 0.85
         );
 
         $response = wp_remote_post( $this->base_url, array(
@@ -119,9 +119,9 @@ class AI_Woo_SA_Groq_Client {
         $body = array(
             'model'       => $this->model,
             'messages'    => $messages,
-            'temperature' => 0.2,
-            'max_tokens'  => 1024,
-            'top_p'       => 0.90,
+            'temperature' => 0.3,
+            'max_tokens'  => 1536,
+            'top_p'       => 0.85,
             'stream'      => true
         );
 
@@ -187,14 +187,16 @@ class AI_Woo_SA_Groq_Client {
         }
 
         // Fast and cheap model for rewriting
-        $model = 'llama-3.1-8b-instant';
+        $model = 'openai/gpt-oss-20b';
 
-        $system_prompt = "Anda adalah AI ekstraktor niat pencarian e-commerce. Tugas Anda mendeteksi apakah pesan pembeli mengandung keluhan kondisi kulit/rambut ATAU permintaan produk.\n"
-                       . "JIKA pesan HANYA sapaan (contoh: 'halo', 'pagi') atau pertanyaan umum tanpa niat mencari solusi/produk (contoh: 'bisa COD?', 'terima kasih'), WAJIB balas HANYA dengan: NO_PRODUCT_INTENT\n"
-                       . "JIKA ada niat mencari produk atau keluhan (contoh: 'rambut lepek', 'ada serum?'), output maksimal 5 kata kunci murni tanpa basa-basi.\n"
+        $system_prompt = "Anda adalah AI ekstraktor niat pencarian e-commerce kecantikan. Tugas Anda melakukan penalaran singkat untuk mendeteksi apakah pesan pembeli mengandung keluhan kondisi kulit/rambut ATAU permintaan produk.\n"
+                       . "ATURAN PENALARAN:\n"
+                       . "1. JIKA pesan HANYA sapaan (contoh: 'halo', 'pagi') atau pertanyaan umum tanpa niat mencari solusi/produk (contoh: 'bisa COD?', 'terima kasih'), WAJIB balas HANYA dengan: NO_PRODUCT_INTENT\n"
+                       . "2. JIKA ada niat mencari produk atau keluhan (contoh: 'rambut lepek', 'kulit kusam', 'ada serum?'), ekstraksi dan simpulkan maksimal 5 kata kunci produk/masalah yang paling relevan untuk pencarian katalog.\n"
                        . "Contoh 1: 'Halo min' -> NO_PRODUCT_INTENT\n"
-                       . "Contoh 2: 'Min rambut saya ketombe parah' -> 'perawatan rambut ketombe'\n"
-                       . "Contoh 3: 'Bisa kirim gojek?' -> NO_PRODUCT_INTENT";
+                       . "Contoh 2: 'Min rambut saya ketombe parah dan rontok' -> 'perawatan rambut ketombe rontok'\n"
+                       . "Contoh 3: 'Bisa kirim gojek hari ini?' -> NO_PRODUCT_INTENT\n"
+                       . "Contoh 4: 'Muka lagi breakout banyak jerawat pasir' -> 'serum jerawat bruntusan breakout'";
 
         $body = array(
             'model'       => $model,
@@ -203,7 +205,7 @@ class AI_Woo_SA_Groq_Client {
                 array( 'role' => 'user', 'content' => $message )
             ),
             'temperature' => 0.1, // Low temp for deterministic output
-            'max_tokens'  => 20
+            'max_tokens'  => 30
         );
 
         $response = wp_remote_post( $this->base_url, array(
@@ -235,7 +237,7 @@ class AI_Woo_SA_Groq_Client {
     }
 
     /**
-     * Classify user message into structured intent using Groq 8B.
+     * Classify user message into structured intent using Groq high-speed reasoning model.
      * Returns JSON with: intent, search_query, order_number.
      *
      * @param string $message Raw user message.
@@ -252,26 +254,29 @@ class AI_Woo_SA_Groq_Client {
             return $default;
         }
 
-        $model = 'llama-3.1-8b-instant';
+        $model = 'openai/gpt-oss-20b';
 
-        $system_prompt  = "Anda adalah AI intent classifier untuk e-commerce skincare/bodycare. ";
-        $system_prompt .= "Analisis pesan pembeli dan output JSON SAJA tanpa penjelasan.\n";
+        $system_prompt  = "Anda adalah AI intent classifier cerdas untuk e-commerce skincare/bodycare. ";
+        $system_prompt .= "Gunakan penalaran logis untuk menganalisis kebutuhan pengguna dan output JSON SAJA tanpa format markdown atau penjelasan lain.\n";
         $system_prompt .= "Format: {\"intent\":\"...\",\"search_query\":\"...\",\"order_number\":\"...\"}\n\n";
-        $system_prompt .= "Intents:\n";
-        $system_prompt .= "- PRODUCT_QUERY: mencari/tanya produk, keluhan kulit/rambut, rekomendasi\n";
-        $system_prompt .= "- ORDER_TRACKING: lacak pesanan, status pengiriman, cek resi, sudah dikirim?\n";
-        $system_prompt .= "- ORDER_DETAIL: detail pesanan, invoice, rincian belanja\n";
-        $system_prompt .= "- ORDER_LIST: riwayat pesanan, pesanan terakhir, pesanan saya\n";
-        $system_prompt .= "- STORE_INFO: info toko, COD, ongkir, jam buka, cara order\n";
-        $system_prompt .= "- OUT_OF_SCOPE: topik di luar toko/kecantikan\n\n";
-        $system_prompt .= "search_query: isi keyword pencarian JIKA intent=PRODUCT_QUERY.\n";
-        $system_prompt .= "PENTING: JIKA PENGGUNA MENGGUNAKAN BAHASA ASING, TERJEMAHKAN KATA KUNCI PENCARIAN KE BAHASA INDONESIA!\n";
-        $system_prompt .= "order_number: isi nomor pesanan JIKA disebutkan, kosong jika tidak.\n\n";
+        $system_prompt .= "Daftar Intent:\n";
+        $system_prompt .= "- PRODUCT_QUERY: mencari/tanya produk, konsultasi masalah kulit/rambut, rekomendasi, bahan aktif, cara pakai\n";
+        $system_prompt .= "- ORDER_TRACKING: lacak pesanan, status pengiriman, cek resi, paket sudah sampai mana\n";
+        $system_prompt .= "- ORDER_DETAIL: detail pesanan, invoice, rincian belanja, isi paket\n";
+        $system_prompt .= "- ORDER_LIST: riwayat pesanan, pesanan terakhir, daftar belanjaan saya\n";
+        $system_prompt .= "- STORE_INFO: info toko, metode COD, ongkir, kurir, jam operasional, cara order\n";
+        $system_prompt .= "- OUT_OF_SCOPE: topik di luar toko, kecantikan, atau perawatan tubuh\n\n";
+        $system_prompt .= "Panduan Penalaran (search_query & order_number):\n";
+        $system_prompt .= "- JIKA intent=PRODUCT_QUERY: rumuskan kata kunci pencarian yang spesifik dan efektif dalam BAHASA INDONESIA (terjemahkan jika pengguna memakai bahasa asing).\n";
+        $system_prompt .= "- JIKA intent selain PRODUCT_QUERY: kosongkan search_query (\"\").\n";
+        $system_prompt .= "- JIKA ada angka resi/pesanan (misal #12345 atau 12345): ekstrak ke order_number, jika tidak kosongkan (\"\").\n\n";
         $system_prompt .= "Contoh:\n";
-        $system_prompt .= "\"rambut rontok\" -> {\"intent\":\"PRODUCT_QUERY\",\"search_query\":\"perawatan rambut rontok\",\"order_number\":\"\"}\n";
-        $system_prompt .= "\"acne serum\" -> {\"intent\":\"PRODUCT_QUERY\",\"search_query\":\"serum jerawat\",\"order_number\":\"\"}\n";
-        $system_prompt .= "\"lacak pesanan #123\" -> {\"intent\":\"ORDER_TRACKING\",\"search_query\":\"\",\"order_number\":\"123\"}\n";
-        $system_prompt .= "\"bisa COD?\" -> {\"intent\":\"STORE_INFO\",\"search_query\":\"\",\"order_number\":\"\"}";
+        $system_prompt .= "\"muka kusam banyak flek hitam\" -> {\"intent\":\"PRODUCT_QUERY\",\"search_query\":\"mencerahkan wajah flek hitam\",\"order_number\":\"\"}\n";
+        $system_prompt .= "\"best brightening serum for oily skin\" -> {\"intent\":\"PRODUCT_QUERY\",\"search_query\":\"serum pencerah kulit berminyak\",\"order_number\":\"\"}\n";
+        $system_prompt .= "\"lacak pesanan #9821\" -> {\"intent\":\"ORDER_TRACKING\",\"search_query\":\"\",\"order_number\":\"9821\"}\n";
+        $system_prompt .= "\"pesanan saya 7721 sudah dikirim belum?\" -> {\"intent\":\"ORDER_TRACKING\",\"search_query\":\"\",\"order_number\":\"7721\"}\n";
+        $system_prompt .= "\"bisa bayar di tempat (COD)?\" -> {\"intent\":\"STORE_INFO\",\"search_query\":\"\",\"order_number\":\"\"}\n";
+        $system_prompt .= "\"siapa presiden prancis?\" -> {\"intent\":\"OUT_OF_SCOPE\",\"search_query\":\"\",\"order_number\":\"\"}";
 
         $body = array(
             'model'       => $model,
@@ -280,7 +285,7 @@ class AI_Woo_SA_Groq_Client {
                 array( 'role' => 'user', 'content' => $message ),
             ),
             'temperature' => 0.05,
-            'max_tokens'  => 60,
+            'max_tokens'  => 100,
         );
 
         $response = wp_remote_post( $this->base_url, array(

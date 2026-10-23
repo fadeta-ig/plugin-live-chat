@@ -126,9 +126,9 @@ class AI_Woo_SA_Plugin_Details {
         <h3>🔄 Bagaimana Sistem Ini Bekerja?</h3>
         <p>Di balik kecerdasannya, AI bekerja menggunakan sistem <strong>"Penyeleksi Niat" (Intent Router 7-Arah)</strong> layaknya resepsionis cerdas:</p>
         <ol>
-            <li><strong>Mendeteksi Niat:</strong> AI (Groq 8B) menganalisis pesan dan mengklasifikasikannya ke 7 kategori (Sapaan, Cari Produk, Lacak Pesanan, Detail Pesanan, Info Toko, dll).</li>
+            <li><strong>Mendeteksi Niat:</strong> AI (Groq Model Cepat / GPT-OSS 20B) menganalisis pesan dan mengklasifikasikannya ke 7 kategori (Sapaan, Cari Produk, Lacak Pesanan, Detail Pesanan, Info Toko, dll).</li>
             <li><strong>Retrieval (RAG):</strong> Mengambil data dari Vector Database atau Order Database sesuai niat pengguna.</li>
-            <li><strong>Generasi Teks:</strong> Model Groq Llama-3 70B meracik informasi tersebut menjadi balasan yang natural, elegan, dan ringkas.</li>
+            <li><strong>Generasi Teks:</strong> Model Groq Flagship (GPT-OSS 120B) meracik informasi tersebut menjadi balasan yang natural, elegan, dan ringkas.</li>
         </ol>
         ';
 
@@ -157,7 +157,7 @@ class AI_Woo_SA_Plugin_Details {
         // Build the HTML for the FAQ tab
         $faq_html = '
         <h3>Apakah AI merespons dengan cepat?</h3>
-        <p><strong>Ya.</strong> Kami menggunakan <em>Groq Llama-3</em> (salah satu model tercepat di dunia) dikombinasikan dengan teknik <em>SSE Streaming</em>. Jawaban akan muncul mengetik kata demi kata secara instan. Selain itu, fitur <em>Semantic Caching</em> membuat pertanyaan berulang dijawab seketika dari <em>cache</em> memori.</p>
+        <p><strong>Ya.</strong> Kami menggunakan <em>Groq LPU Inference Engine</em> (didukung GPT-OSS 120B) dikombinasikan dengan teknik <em>SSE Streaming</em>. Jawaban akan muncul mengetik kata demi kata secara instan. Selain itu, fitur <em>Semantic Caching</em> membuat pertanyaan berulang dijawab seketika dari <em>cache</em> memori.</p>
 
         <h3>Apakah bisa berbahasa Inggris atau bahasa asing lainnya?</h3>
         <p><strong>Sangat bisa.</strong> Fitur <em>Language Mirroring</em> kami memaksa AI untuk mengikuti bahasa pengguna. Jika turis bertanya dalam bahasa Inggris, AI membalas dalam bahasa Inggris sambil menerjemahkan deskripsi produk katalog (yang berbahasa Indonesia) secara otomatis.</p>
