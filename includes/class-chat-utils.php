@@ -34,10 +34,13 @@ class AI_Woo_SA_Chat_Utils {
      */
     public static function is_complaint( $message ) {
         $keywords = array(
-            'tidak membantu', 'operator', 'komplain', 'manusia',
-            'kecewa', 'customer service', 'hubungi cs', 'bicara dengan orang',
+            'tidak membantu', 'hubungi operator', 'minta operator', 'bicara dengan operator',
+            'ajukan komplain', 'mau komplain', 'saya komplain', 'sangat kecewa',
+            'bicara dengan manusia', 'ngomong sama manusia', 'butuh manusia',
+            'customer service', 'hubungi cs', 'bicara dengan orang', 'chat admin cs',
+            'minta nomor wa cs', 'sambungkan ke cs',
         );
-        $lower_message = mb_strtolower( $message, 'UTF-8' );
+        $lower_message = mb_strtolower( trim( $message ), 'UTF-8' );
         foreach ( $keywords as $kw ) {
             if ( mb_strpos( $lower_message, $kw, 0, 'UTF-8' ) !== false ) {
                 return true;

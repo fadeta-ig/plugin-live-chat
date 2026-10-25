@@ -84,7 +84,7 @@ class AI_Woo_SA_Gemini_Client {
                 'temperature' => 0.2,
                 'topK' => 40,
                 'topP' => 0.90,
-                'maxOutputTokens' => 1024,
+                'maxOutputTokens' => 2048,
             )
         );
 
@@ -110,10 +110,30 @@ class AI_Woo_SA_Gemini_Client {
             return new WP_Error( 'gemini_blocked', 'Request blocked by safety settings: ' . $body_response['promptFeedback']['blockReason'], $body_response );
         }
 
-        if ( isset( $body_response['candidates'][0]['content']['parts'][0]['text'] ) ) {
-            return $body_response['candidates'][0]['content']['parts'][0]['text'];
+        $answer_text = $this->extract_answer_text( $body_response );
+        if ( $answer_text !== '' ) {
+            return $answer_text;
         }
 
         return new WP_Error( 'gemini_error', 'Invalid response structure or empty candidates.', $body_response );
+    }
+
+    /**
+     * Joins all visible text parts of the first candidate, skipping 'thought' parts.
+     */
+    private function extract_answer_text( $body_response ) {
+        if ( ! isset( $body_response['candidates'][0]['content']['parts'] ) || ! is_array( $body_response['candidates'][0]['content']['parts'] ) ) {
+            return '';
+        }
+
+        $segments = array();
+        foreach ( $body_response['candidates'][0]['content']['parts'] as $part ) {
+            if ( ! empty( $part['thought'] ) || ! isset( $part['text'] ) ) {
+                continue;
+            }
+            $segments[] = (string) $part['text'];
+        }
+
+        return trim( implode( '', $segments ) );
     }
 }

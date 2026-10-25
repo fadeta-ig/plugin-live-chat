@@ -2,8 +2,10 @@
 /**
  * Intent Classifier
  *
- * Classifies user messages into structured intents using a combination
- * of local regex pre-checks and Groq LLM classification.
+ * Two-stage router:
+ *  1. Deterministic, whole-message local pre-filters (zero API cost).
+ *  2. History-aware LLM classification for everything that is not unambiguous.
+ *
  * Returns: ['intent' => string, 'search_query' => string, 'order_number' => string]
  */
 
@@ -13,166 +15,201 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 class AI_Woo_SA_Intent_Classifier {
 
-    /**
-     * Valid intent constants.
-     */
-    const INTENT_GREETING      = 'GREETING';
-    const INTENT_PRODUCT_QUERY = 'PRODUCT_QUERY';
+    const INTENT_GREETING       = 'GREETING';
+    const INTENT_PRODUCT_QUERY  = 'PRODUCT_QUERY';
     const INTENT_ORDER_TRACKING = 'ORDER_TRACKING';
-    const INTENT_ORDER_DETAIL  = 'ORDER_DETAIL';
-    const INTENT_ORDER_LIST    = 'ORDER_LIST';
-    const INTENT_STORE_INFO    = 'STORE_INFO';
-    const INTENT_OUT_OF_SCOPE  = 'OUT_OF_SCOPE';
+    const INTENT_ORDER_DETAIL   = 'ORDER_DETAIL';
+    const INTENT_ORDER_LIST     = 'ORDER_LIST';
+    const INTENT_STORE_INFO     = 'STORE_INFO';
+    const INTENT_GENERAL_CHAT   = 'GENERAL_CHAT';
+    const INTENT_OUT_OF_SCOPE   = 'OUT_OF_SCOPE';
+
+    const MAX_LOCAL_GREETING_WORDS = 8;
 
     /**
-     * Default result structure.
+     * @param string $message             Raw user message.
+     * @param string $conversation_digest Recent turns, used to resolve follow-ups.
      */
-    private static function default_result( $intent = self::INTENT_GREETING ) {
-        return array(
-            'intent'       => $intent,
-            'search_query' => '',
-            'order_number' => '',
-        );
+    public static function classify( string $message, string $conversation_digest = '' ): array {
+        $local_intent = self::classify_locally( $message );
+        if ( $local_intent !== '' ) {
+            return self::build_result( $local_intent );
+        }
+
+        $plain_message = AI_Woo_SA_Text_Normalizer::to_plain( $message );
+        $order_number  = self::extract_order_number( $message );
+
+        $order_intent = self::detect_order_intent( $plain_message );
+        if ( $order_intent !== '' ) {
+            return self::build_result( $order_intent, '', $order_number );
+        }
+
+        $groq       = new AI_Woo_SA_Groq_Client();
+        $llm_result = $groq->classify_intent( $message, $conversation_digest );
+
+        return self::finalize_llm_result( $llm_result, $message, $order_number );
     }
 
     /**
-     * Classify a user message into a structured intent.
+     * Whole-message matching only. "halo mau tanya serum retinol" must NOT be a
+     * greeting, because the real question would then get no product context.
      *
-     * @param string $message Raw user message.
-     * @return array Structured intent result.
+     * @return string Intent constant, or '' when the message needs deeper analysis.
      */
-    public static function classify( $message ) {
-        $clean = trim( mb_strtolower( $message, 'UTF-8' ) );
-
-        // 1. Local pre-filter: simple greetings (0 API cost)
-        if ( self::is_simple_greeting( $clean ) ) {
-            return self::default_result( self::INTENT_GREETING );
+    private static function classify_locally( string $message ): string {
+        $core_phrase = self::extract_core_phrase( $message );
+        if ( $core_phrase === false ) {
+            return '';
         }
 
-        // 2. Local pre-filter: extract order number if present
-        $order_number = self::extract_order_number( $message );
-
-        // 3. Local pre-filter: order-related keywords
-        $order_intent = self::detect_order_intent( $clean );
-        if ( $order_intent ) {
-            $result = self::default_result( $order_intent );
-            $result['order_number'] = $order_number;
-            return $result;
+        if ( $core_phrase === '' ) {
+            return self::INTENT_GREETING;
         }
 
-        // 4. For ambiguous messages, call Groq 8B classifier
-        $groq = new AI_Woo_SA_Groq_Client();
-        $llm_result = $groq->classify_intent( $message );
-
-        // Override order_number from regex if LLM missed it
-        if ( $order_number && empty( $llm_result['order_number'] ) ) {
-            $llm_result['order_number'] = $order_number;
+        if ( isset( self::conversational_phrase_set()[ $core_phrase ] ) ) {
+            return self::INTENT_GREETING;
         }
 
-        // Validate intent is recognized
+        if ( isset( self::gratitude_phrase_set()[ $core_phrase ] ) ) {
+            return self::INTENT_GENERAL_CHAT;
+        }
+
+        return '';
+    }
+
+    /**
+     * Strips leading/trailing greeting tokens and returns what is left.
+     *
+     * @return string|false '' when the message is only greetings; false when too long to judge locally.
+     */
+    private static function extract_core_phrase( string $message ) {
+        $collapsed = AI_Woo_SA_Text_Normalizer::to_collapsed( $message );
+        if ( $collapsed === '' ) {
+            return '';
+        }
+
+        $tokens = explode( ' ', $collapsed );
+        if ( count( $tokens ) > self::MAX_LOCAL_GREETING_WORDS ) {
+            return false;
+        }
+
+        $greeting_tokens = self::greeting_token_set();
+        $start           = 0;
+        $end             = count( $tokens );
+
+        while ( $start < $end && isset( $greeting_tokens[ $tokens[ $start ] ] ) ) {
+            $start++;
+        }
+        while ( $end > $start && isset( $greeting_tokens[ $tokens[ $end - 1 ] ] ) ) {
+            $end--;
+        }
+
+        return implode( ' ', array_slice( $tokens, $start, $end - $start ) );
+    }
+
+    /**
+     * Precise whole-phrase order detection. Bare words such as "kirim" or
+     * "pengiriman" are intentionally absent: "ongkir kirim ke Bali?" is store policy.
+     */
+    private static function detect_order_intent( string $plain_message ): string {
+        $phrase_groups = array(
+            self::INTENT_ORDER_TRACKING => AI_Woo_SA_Intent_Lexicon::TRACKING_PHRASES,
+            self::INTENT_ORDER_DETAIL   => AI_Woo_SA_Intent_Lexicon::DETAIL_PHRASES,
+            self::INTENT_ORDER_LIST     => AI_Woo_SA_Intent_Lexicon::LIST_PHRASES,
+        );
+
+        foreach ( $phrase_groups as $intent => $phrases ) {
+            foreach ( $phrases as $phrase ) {
+                if ( AI_Woo_SA_Text_Normalizer::contains_phrase( $plain_message, $phrase ) ) {
+                    return $intent;
+                }
+            }
+        }
+
+        return '';
+    }
+
+    /**
+     * Matches "#12345" or "pesanan/order/no/nomor 12345" as whole words.
+     */
+    private static function extract_order_number( string $message ): string {
+        if ( preg_match( '/#(\d{3,})/', $message, $matches ) ) {
+            return $matches[1];
+        }
+        if ( preg_match( '/(?<![\p{L}\p{N}])(?:pesanan|order|no|nomor)(?![\p{L}\p{N}])\s*[:.]?\s*(\d{3,})/iu', $message, $matches ) ) {
+            return $matches[1];
+        }
+
+        return '';
+    }
+
+    private static function finalize_llm_result( array $llm_result, string $message, string $regex_order_number ): array {
         $valid_intents = array(
+            self::INTENT_GREETING,
             self::INTENT_PRODUCT_QUERY,
             self::INTENT_ORDER_TRACKING,
             self::INTENT_ORDER_DETAIL,
             self::INTENT_ORDER_LIST,
             self::INTENT_STORE_INFO,
+            self::INTENT_GENERAL_CHAT,
             self::INTENT_OUT_OF_SCOPE,
         );
-        if ( ! in_array( $llm_result['intent'], $valid_intents, true ) ) {
-            $llm_result['intent'] = self::INTENT_PRODUCT_QUERY;
+
+        $intent = isset( $llm_result['intent'] ) ? (string) $llm_result['intent'] : '';
+        if ( ! in_array( $intent, $valid_intents, true ) ) {
+            $intent = self::INTENT_PRODUCT_QUERY;
         }
 
-        return $llm_result;
+        $search_query = isset( $llm_result['search_query'] ) ? trim( (string) $llm_result['search_query'] ) : '';
+        if ( $intent === self::INTENT_PRODUCT_QUERY && $search_query === '' ) {
+            $search_query = $message;
+        }
+        if ( $intent !== self::INTENT_PRODUCT_QUERY ) {
+            $search_query = '';
+        }
+
+        $order_number = isset( $llm_result['order_number'] ) ? trim( (string) $llm_result['order_number'] ) : '';
+        if ( $order_number === '' ) {
+            $order_number = $regex_order_number;
+        }
+
+        return self::build_result( $intent, $search_query, $order_number );
     }
 
-    /**
-     * Detect simple greetings locally (no API call).
-     */
-    private static function is_simple_greeting( $clean_message ) {
-        $greetings = array(
-            'halo', 'hai', 'hi', 'hey', 'pagi', 'siang', 'sore',
-            'malam', 'tes', 'test', 'helo', 'hello', 'p', 'min',
-            'kak', 'selamat', 'assalamualaikum', 'permisi', 'bang',
-            // Global greetings
-            'good', 'morning', 'afternoon', 'evening', 'hola',
-            'bonjour', 'ni', 'hao', 'konnichiwa', 'howdy',
+    private static function build_result( string $intent, string $search_query = '', string $order_number = '' ): array {
+        return array(
+            'intent'       => $intent,
+            'search_query' => $search_query,
+            'order_number' => $order_number,
         );
-        $stripped = preg_replace( '/[^\p{L}\s]/u', '', $clean_message );
-        $words = preg_split( '/\s+/', trim( $stripped ), -1, PREG_SPLIT_NO_EMPTY );
-
-        if ( empty( $words ) || count( $words ) > 3 ) {
-            return false;
-        }
-
-        foreach ( $words as $word ) {
-            if ( ! in_array( $word, $greetings, true ) ) {
-                return false;
-            }
-        }
-
-        return true;
     }
 
-    /**
-     * Extract order number from message using regex.
-     * Matches: #12345, pesanan 12345, order 12345, no 12345
-     */
-    private static function extract_order_number( $message ) {
-        // Match # followed by digits, or standalone 4+ digit numbers
-        if ( preg_match( '/#(\d{3,})/', $message, $m ) ) {
-            return $m[1];
+    private static function greeting_token_set(): array {
+        static $set = null;
+        if ( $set === null ) {
+            $set = AI_Woo_SA_Text_Normalizer::build_collapsed_set( AI_Woo_SA_Intent_Lexicon::GREETING_TOKENS );
         }
-        // Match "pesanan/order/no/nomor" followed by digits
-        if ( preg_match( '/(?:pesanan|order|no|nomor)\s*[:\s]?\s*(\d{3,})/iu', $message, $m ) ) {
-            return $m[1];
-        }
-        return '';
+
+        return $set;
     }
 
-    /**
-     * Detect order-related intent from keywords locally.
-     *
-     * @return string|null Intent constant or null if not order-related.
-     */
-    private static function detect_order_intent( $clean_message ) {
-        $tracking_keywords = array(
-            'lacak', 'tracking', 'resi', 'kirim', 'pengiriman',
-            'sampai mana', 'sudah dikirim', 'posisi paket',
-            'nomor resi', 'cek resi', 'paket saya',
-            // Global tracking
-            'track', 'where is', 'shipping status', 'shipped',
-        );
-        foreach ( $tracking_keywords as $kw ) {
-            if ( mb_strpos( $clean_message, $kw, 0, 'UTF-8' ) !== false ) {
-                return self::INTENT_ORDER_TRACKING;
-            }
+    private static function conversational_phrase_set(): array {
+        static $set = null;
+        if ( $set === null ) {
+            $set = AI_Woo_SA_Text_Normalizer::build_collapsed_set(
+                array_merge( AI_Woo_SA_Intent_Lexicon::IDENTITY_PHRASES, AI_Woo_SA_Intent_Lexicon::OPENER_PHRASES )
+            );
         }
 
-        $detail_keywords = array(
-            'detail pesanan', 'invoice', 'nota', 'struk',
-            'total belanja', 'rincian pesanan',
-            // Global detail
-            'order details', 'receipt', 'bill',
-        );
-        foreach ( $detail_keywords as $kw ) {
-            if ( mb_strpos( $clean_message, $kw, 0, 'UTF-8' ) !== false ) {
-                return self::INTENT_ORDER_DETAIL;
-            }
+        return $set;
+    }
+
+    private static function gratitude_phrase_set(): array {
+        static $set = null;
+        if ( $set === null ) {
+            $set = AI_Woo_SA_Text_Normalizer::build_collapsed_set( AI_Woo_SA_Intent_Lexicon::GRATITUDE_PHRASES );
         }
 
-        $list_keywords = array(
-            'pesanan saya', 'pesanan terakhir', 'riwayat pesanan',
-            'riwayat belanja', 'order saya', 'history pesanan',
-            'daftar pesanan',
-            // Global list
-            'my orders', 'order history', 'recent orders',
-        );
-        foreach ( $list_keywords as $kw ) {
-            if ( mb_strpos( $clean_message, $kw, 0, 'UTF-8' ) !== false ) {
-                return self::INTENT_ORDER_LIST;
-            }
-        }
-
-        return null;
+        return $set;
     }
 }

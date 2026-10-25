@@ -58,6 +58,11 @@ final class AI_Woo_Sales_Assistant
         require_once AI_WOO_SA_PLUGIN_DIR . 'includes/class-security-guard.php';
         require_once AI_WOO_SA_PLUGIN_DIR . 'includes/class-sync-manager.php';
         require_once AI_WOO_SA_PLUGIN_DIR . 'includes/class-chat-utils.php';
+        require_once AI_WOO_SA_PLUGIN_DIR . 'includes/class-text-normalizer.php';
+        require_once AI_WOO_SA_PLUGIN_DIR . 'includes/class-intent-lexicon.php';
+        require_once AI_WOO_SA_PLUGIN_DIR . 'includes/class-intent-prompt.php';
+        require_once AI_WOO_SA_PLUGIN_DIR . 'includes/class-conversation-context.php';
+        require_once AI_WOO_SA_PLUGIN_DIR . 'includes/class-stream-accumulator.php';
         require_once AI_WOO_SA_PLUGIN_DIR . 'includes/class-prompt-builder.php';
         require_once AI_WOO_SA_PLUGIN_DIR . 'includes/class-sse-handler.php';
         require_once AI_WOO_SA_PLUGIN_DIR . 'includes/class-chat-handler.php';

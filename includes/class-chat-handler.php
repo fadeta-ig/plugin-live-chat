@@ -128,21 +128,22 @@ class AI_Woo_SA_Chat_Handler {
         // ============================================================
         //  STEP 1: Intent Classification
         // ============================================================
-        $intent_result = AI_Woo_SA_Intent_Classifier::classify( $message );
+        $transient_key = 'ai_woo_sa_' . md5( $session_id );
+        $prior_history = get_transient( $transient_key );
+        if ( ! is_array( $prior_history ) ) {
+            $prior_history = array();
+        }
+
+        $intent_result = AI_Woo_SA_Intent_Classifier::classify(
+            (string) $message,
+            AI_Woo_SA_Conversation_Context::build_digest( $prior_history )
+        );
         $intent        = $intent_result['intent'];
         $search_query  = $intent_result['search_query'];
         $order_number  = $intent_result['order_number'];
 
-        // Out of scope → immediate fallback
-        if ( $intent === AI_Woo_SA_Intent_Classifier::INTENT_OUT_OF_SCOPE ) {
-            return AI_Woo_SA_Chat_Utils::trigger_human_fallback( $whatsapp_number, $session_id, $message );
-        }
-
-        // --- GREETING & STORE_INFO BRANCH ---
-        if ( in_array( $intent, array( AI_Woo_SA_Intent_Classifier::INTENT_GREETING, AI_Woo_SA_Intent_Classifier::INTENT_STORE_INFO ), true ) ) {
-            // No product or order context needed. SOP is sufficient.
-            // Proceed directly to STEP 3 with empty context.
-        }
+        // GREETING / GENERAL_CHAT / STORE_INFO / OUT_OF_SCOPE need no retrieval. They go straight to
+        // generation, steered by an intent-specific directive inside the system prompt.
 
         // ============================================================
         //  STEP 2: Data Fetching based on Intent
@@ -165,10 +166,14 @@ class AI_Woo_SA_Chat_Handler {
 
         // --- PRODUCT_QUERY BRANCH ---
         if ( $intent === AI_Woo_SA_Intent_Classifier::INTENT_PRODUCT_QUERY ) {
+            // The cache is shared by all visitors, so it may only serve answers that do not
+            // depend on a personal cart or earlier conversation turns.
+            $use_semantic_cache = empty( $cart_items ) && empty( $prior_history );
+
             $resolved = self::resolve_product_context(
                 $search_query, $gemini, $semantic_cache,
                 $curr_prod_id, $cart_items, $session_id,
-                $message, $whatsapp_number
+                $message, $use_semantic_cache
             );
 
             // Early return if semantic cache hit or error
@@ -202,17 +207,13 @@ class AI_Woo_SA_Chat_Handler {
 
         $system_instruction = AI_Woo_SA_Prompt_Builder::build_system_prompt(
             $store_sop, $product_context_text, $order_context_text,
-            $current_product, $cart_items
+            $current_product, $cart_items, $intent
         );
 
         // ============================================================
         //  STEP 4: Session Memory
         // ============================================================
-        $transient_key = 'ai_woo_sa_' . md5( $session_id );
-        $chat_history = get_transient( $transient_key );
-        if ( ! is_array( $chat_history ) ) {
-            $chat_history = array();
-        }
+        $chat_history = $prior_history;
 
         $chat_history[] = array(
             'role'  => 'user',
@@ -271,8 +272,8 @@ class AI_Woo_SA_Chat_Handler {
 
         AI_Woo_SA_Chat_Logger::log( $session_id, $message, $bot_response_text, false, count( $recommended_products ), $highest_score, $intent );
 
-        // Update semantic cache (only for product queries with valid embedding)
-        if ( $embedding ) {
+        // Update semantic cache (only for context-free product queries with a valid embedding)
+        if ( $embedding && ! empty( $use_semantic_cache ) ) {
             $fresh_cache = get_transient( 'ai_woo_sa_semantic_cache' );
             if ( ! is_array( $fresh_cache ) ) {
                 $fresh_cache = array();
@@ -308,43 +309,43 @@ class AI_Woo_SA_Chat_Handler {
     private static function resolve_product_context(
         $search_query, $gemini, $semantic_cache,
         $curr_prod_id, $cart_items, $session_id,
-        $message, $whatsapp_number
+        $message, $use_semantic_cache
     ) {
         $context_products = array();
         $recommended_products = array();
         $highest_score = 0;
 
         $embedding = $gemini->get_embedding( $search_query );
-        if ( is_wp_error( $embedding ) ) {
-            error_log( 'AI Woo SA Embedding Error: ' . $embedding->get_error_message() );
-            return array( 'early_return' => AI_Woo_SA_Chat_Utils::trigger_human_fallback( $whatsapp_number, $session_id, $message ) );
-        }
+        $matches   = array();
 
-        // Semantic cache check
-        foreach ( $semantic_cache as $cache_item ) {
-            $cache_prod_id = isset( $cache_item['current_product_id'] ) ? $cache_item['current_product_id'] : '';
-            if ( $curr_prod_id === $cache_prod_id && isset( $cache_item['vector'] ) && AI_Woo_SA_Chat_Utils::calculate_cosine_similarity( $embedding, $cache_item['vector'] ) > 0.95 ) {
-                AI_Woo_SA_Chat_Logger::log( $session_id, $message, $cache_item['response'], false, count( $cache_item['products'] ), 0.99, 'PRODUCT_QUERY' );
-                return array( 'early_return' => rest_ensure_response( array(
-                    'text'     => $cache_item['response'],
-                    'products' => $cache_item['products'],
-                    'orders'   => array(),
-                    'fallback' => false,
-                ) ) );
+        if ( is_wp_error( $embedding ) ) {
+            error_log( 'AI Woo SA Embedding Warning (Graceful Fallback to Keywords): ' . $embedding->get_error_message() );
+        } else {
+            // Semantic cache check
+            foreach ( $use_semantic_cache ? $semantic_cache : array() as $cache_item ) {
+                $cache_prod_id = isset( $cache_item['current_product_id'] ) ? $cache_item['current_product_id'] : '';
+                if ( $curr_prod_id === $cache_prod_id && isset( $cache_item['vector'] ) && AI_Woo_SA_Chat_Utils::calculate_cosine_similarity( $embedding, $cache_item['vector'] ) > 0.95 ) {
+                    AI_Woo_SA_Chat_Logger::log( $session_id, $message, $cache_item['response'], false, count( $cache_item['products'] ), 0.99, 'PRODUCT_QUERY' );
+                    return array( 'early_return' => rest_ensure_response( array(
+                        'text'     => $cache_item['response'],
+                        'products' => $cache_item['products'],
+                        'orders'   => array(),
+                        'fallback' => false,
+                    ) ) );
+                }
+            }
+
+            // Pinecone vector search
+            $pinecone = new AI_Woo_SA_Pinecone_Client();
+            $filter = array( 'in_stock' => array( '$eq' => true ) );
+            $pinecone_res = $pinecone->query( $embedding, 3, $filter );
+
+            if ( is_wp_error( $pinecone_res ) ) {
+                error_log( 'AI Woo SA Pinecone Warning (Graceful Fallback to Keywords): ' . $pinecone_res->get_error_message() );
+            } elseif ( isset( $pinecone_res['matches'] ) && is_array( $pinecone_res['matches'] ) ) {
+                $matches = $pinecone_res['matches'];
             }
         }
-
-        // Pinecone vector search
-        $pinecone = new AI_Woo_SA_Pinecone_Client();
-        $filter = array( 'in_stock' => array( '$eq' => true ) );
-        $pinecone_res = $pinecone->query( $embedding, 3, $filter );
-
-        if ( is_wp_error( $pinecone_res ) ) {
-            error_log( 'AI Woo SA Pinecone Error: ' . $pinecone_res->get_error_message() );
-            return array( 'early_return' => AI_Woo_SA_Chat_Utils::trigger_human_fallback( $whatsapp_number, $session_id, $message ) );
-        }
-
-        $matches = isset( $pinecone_res['matches'] ) ? $pinecone_res['matches'] : array();
 
         // Build cart filter
         $cart_product_ids = array();

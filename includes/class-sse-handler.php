@@ -54,22 +54,47 @@ class AI_Woo_SA_SSE_Handler {
         echo "event: init\ndata: {$init_data}\n\n";
         flush();
 
-        $groq_stream = new AI_Woo_SA_Groq_Client();
-        $groq_stream->generate_content_stream( $system_instruction, $chat_history );
+        $groq_stream   = new AI_Woo_SA_Groq_Client();
+        $streamed_text = $groq_stream->generate_content_stream( $system_instruction, $chat_history );
 
         echo "\nevent: done\ndata: {}\n\n";
         flush();
 
-        // Persist history for streaming
-        $chat_history[] = array(
-            'role'  => 'model',
-            'parts' => array( array( 'text' => '[Streamed via SSE]' ) ),
+        self::persist_streamed_turn(
+            $session_id, $message, $streamed_text, $chat_history,
+            count( $recommended_products ), $highest_score, $intent
         );
-        $transient_key = 'ai_woo_sa_' . md5( $session_id );
-        set_transient( $transient_key, $chat_history, 24 * HOUR_IN_SECONDS );
-
-        AI_Woo_SA_Chat_Logger::log( $session_id, $message, '[Streamed via SSE]', false, count( $recommended_products ), $highest_score, $intent );
 
         exit;
+    }
+
+    /**
+     * Stores what was actually streamed so the next turn has real context.
+     * - Failed/empty stream: nothing is stored (keeps user/model roles alternating).
+     * - Escalation token: a neutral marker turn is stored instead of the raw token.
+     */
+    private static function persist_streamed_turn(
+        $session_id, $message, $streamed_text, $chat_history,
+        $matched_product_count, $highest_score, $intent
+    ) {
+        $is_failed     = $streamed_text === '';
+        $is_escalation = ! $is_failed && strpos( $streamed_text, 'TRIGGER_HUMAN' ) !== false;
+
+        if ( $is_failed ) {
+            AI_Woo_SA_Chat_Logger::log( $session_id, $message, '[Stream failed]', true, $matched_product_count, $highest_score, $intent );
+            return;
+        }
+
+        $stored_text = $is_escalation
+            ? 'Percakapan dialihkan ke Customer Service.'
+            : AI_Woo_SA_Security_Guard::sanitize_outgoing_response( $streamed_text );
+
+        $chat_history[] = array(
+            'role'  => 'model',
+            'parts' => array( array( 'text' => $stored_text ) ),
+        );
+        set_transient( 'ai_woo_sa_' . md5( $session_id ), $chat_history, 24 * HOUR_IN_SECONDS );
+
+        AI_Woo_SA_Chat_Logger::log( $session_id, $message, $stored_text, $is_escalation, $matched_product_count, $highest_score, $intent );
     }
 }
