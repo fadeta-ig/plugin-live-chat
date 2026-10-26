@@ -128,11 +128,25 @@ final class AI_Woo_Sales_Assistant
         }
     }
 
+    /**
+     * Cache-busting version based on file modification time.
+     *
+     * @param string $relative_path Path relative to the plugin directory.
+     * @return string
+     */
+    private function get_asset_version($relative_path)
+    {
+        $file_path = AI_WOO_SA_PLUGIN_DIR . $relative_path;
+        $modified_time = file_exists($file_path) ? filemtime($file_path) : false;
+        return $modified_time ? (string) $modified_time : AI_WOO_SA_VERSION;
+    }
+
     public function enqueue_scripts()
     {
-        $version = time(); // Force cache bypass during testing
-        wp_enqueue_style('ai-woo-sa-widget-css', AI_WOO_SA_PLUGIN_URL . 'assets/css/widget.css', array(), $version);
-        wp_enqueue_script('ai-woo-sa-widget-js', AI_WOO_SA_PLUGIN_URL . 'assets/js/widget.js', array(), $version, true);
+        $css_version = $this->get_asset_version('assets/css/widget.css');
+        $js_version = $this->get_asset_version('assets/dist/widget.js');
+        wp_enqueue_style('ai-woo-sa-widget-css', AI_WOO_SA_PLUGIN_URL . 'assets/css/widget.css', array(), $css_version);
+        wp_enqueue_script('ai-woo-sa-widget-js', AI_WOO_SA_PLUGIN_URL . 'assets/dist/widget.js', array(), $js_version, array('in_footer' => true, 'strategy' => 'defer'));
 
         $options = get_option('ai_woo_sa_settings');
         $bot_name = !empty($options['bot_name']) ? $options['bot_name'] : 'AI Sales Assistant';
