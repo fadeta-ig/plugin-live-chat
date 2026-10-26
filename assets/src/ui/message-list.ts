@@ -12,19 +12,22 @@ export const updateJumpButton = (): void => {
     jumpBtn.style.display = isScrolledUp() ? 'inline-flex' : 'none';
 };
 
-export const scrollToBottom = (force = false): void => {
-    const { chatBody, jumpBtn } = getElements();
+export const scrollToBottom = (force = true): void => {
+    const { chatBody } = getElements();
     if (force || !isScrolledUp()) {
         chatBody.scrollTop = chatBody.scrollHeight;
-        jumpBtn.style.display = 'none';
-    } else {
-        jumpBtn.style.display = 'inline-flex';
     }
+    updateJumpButton();
 };
 
-export const appendToChat = (node: HTMLElement): void => {
-    getElements().chatBody.appendChild(node);
-    scrollToBottom();
+export const appendToChat = (node: HTMLElement, forceScroll = true): void => {
+    const { chatBody } = getElements();
+    const wasNearBottom = !isScrolledUp();
+    chatBody.appendChild(node);
+    if (forceScroll || wasNearBottom) {
+        chatBody.scrollTop = chatBody.scrollHeight;
+    }
+    updateJumpButton();
 };
 
 export const clearChat = (): void => {

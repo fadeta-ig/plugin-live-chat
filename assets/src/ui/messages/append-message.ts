@@ -11,14 +11,16 @@ export const appendMessage = (
     save = true,
     isRawHtml = false,
 ): HTMLDivElement => {
+    const isWelcome = text.includes('ai-woo-sa-welcome');
     const message = document.createElement('div');
-    message.className = `ai-woo-sa-msg ${sender}`;
+    message.className = `ai-woo-sa-msg ${sender}${isWelcome ? ' ai-woo-sa-msg-welcome' : ''}`;
 
     const bodyHtml = isRawHtml ? text : `<p>${renderPlainMessage(text)}</p>`;
-    message.innerHTML = `${bodyHtml}<span class="ai-woo-sa-time">${formatClock(new Date())}</span>`;
+    const timeHtml = isWelcome ? '' : `<span class="ai-woo-sa-time">${formatClock(new Date())}</span>`;
+    message.innerHTML = `${bodyHtml}${timeHtml}`;
     appendToChat(message);
 
-    if (sender === 'bot') incrementUnread();
+    if (sender === 'bot' && !isWelcome) incrementUnread();
     if (save) {
         pushHistory({ type: 'msg', text, sender, isRawHtml });
         saveHistory();
