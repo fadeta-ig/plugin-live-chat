@@ -1,55 +1,74 @@
 import { escapeHtml } from '../utils/escape-html';
-
-const RESET_ICON_PATH = 'M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z';
-const CLOSE_ICON_PATH =
-    'M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z';
+import {
+    ICON_ARROW_DOWN,
+    ICON_CLOSE,
+    ICON_LAUNCHER,
+    ICON_REFRESH,
+    ICON_SEND,
+} from './icons/icons';
 
 const buildHeader = (botName: string): string => `
-    <div class="ai-woo-sa-header">
-        <div>
-            <h3>${escapeHtml(botName)}</h3>
-            <div class="ai-woo-sa-header-status"><span class="ai-woo-sa-status-dot"></span> Online</div>
+    <header class="ai-woo-sa-header">
+        <div class="ai-woo-sa-header-brand">
+            <div class="ai-woo-sa-avatar" aria-hidden="true">
+                <span class="ai-woo-sa-avatar-text">SA</span>
+            </div>
+            <div class="ai-woo-sa-header-info">
+                <h3 class="ai-woo-sa-header-title">${escapeHtml(botName)}</h3>
+                <div class="ai-woo-sa-header-status">
+                    <span class="ai-woo-sa-status-dot" aria-hidden="true"></span>
+                    <span class="ai-woo-sa-status-label">Beauty Advisor</span>
+                </div>
+            </div>
         </div>
-        <div style="display:flex; align-items:center; gap:8px;">
-            <button class="ai-woo-sa-reset" id="ai-woo-sa-reset-btn" aria-label="Reset chat" style="background:transparent; border:none; color:white; cursor:pointer; opacity:0.8; padding:4px;">
-                <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="${RESET_ICON_PATH}"/></svg>
+        <div class="ai-woo-sa-header-actions">
+            <button class="ai-woo-sa-header-btn" id="ai-woo-sa-reset-btn" aria-label="Mulai obrolan baru" title="Mulai obrolan baru">
+                ${ICON_REFRESH}
             </button>
-            <button class="ai-woo-sa-close" id="ai-woo-sa-close-btn" aria-label="Close chat" style="background:transparent; border:none; color:white; cursor:pointer; padding:4px;">
-                <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="${CLOSE_ICON_PATH}"/></svg>
+            <button class="ai-woo-sa-header-btn" id="ai-woo-sa-close-btn" aria-label="Tutup obrolan" title="Tutup">
+                ${ICON_CLOSE}
             </button>
         </div>
-    </div>`;
+    </header>`;
 
 const buildComposer = (): string => `
-    <div class="ai-woo-sa-footer">
-        <input type="text" id="ai-woo-sa-input" class="ai-woo-sa-input" placeholder="Tanya sesuatu..." autocomplete="off">
-        <button class="ai-woo-sa-send" id="ai-woo-sa-send-btn" aria-label="Send message">
-            <svg viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
-        </button>
-    </div>`;
+    <footer class="ai-woo-sa-footer">
+        <div class="ai-woo-sa-composer">
+            <input type="text" id="ai-woo-sa-input" class="ai-woo-sa-input" placeholder="Tulis pertanyaan Anda..." autocomplete="off" aria-label="Pesan Anda" />
+            <button class="ai-woo-sa-send" id="ai-woo-sa-send-btn" aria-label="Kirim pesan" title="Kirim">
+                ${ICON_SEND}
+            </button>
+        </div>
+        <div class="ai-woo-sa-disclaimer">
+            <span>Dijawab oleh AI. Untuk kepastian, hubungi CS.</span>
+        </div>
+    </footer>`;
 
 const buildLauncher = (): string => `
-    <button class="ai-woo-sa-fab" id="ai-woo-sa-fab" aria-label="Open chat">
-        <span class="ai-woo-sa-badge" id="ai-woo-sa-badge" style="display:none;">0</span>
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+    <button class="ai-woo-sa-fab" id="ai-woo-sa-fab" aria-label="Buka layanan konsultasi">
+        <span class="ai-woo-sa-badge" id="ai-woo-sa-badge" style="display:none;" aria-label="Pesan baru">0</span>
+        <span class="ai-woo-sa-fab-icon">${ICON_LAUNCHER}</span>
     </button>`;
 
 const buildConfirmDialog = (): string => `
-    <div class="ai-woo-sa-confirm-overlay" id="ai-woo-sa-confirm-overlay">
+    <div class="ai-woo-sa-confirm-overlay" id="ai-woo-sa-confirm-overlay" role="alertdialog" aria-modal="true" aria-labelledby="ai-woo-sa-confirm-title" aria-describedby="ai-woo-sa-confirm-text">
         <div class="ai-woo-sa-confirm-box">
-            <h4 id="ai-woo-sa-confirm-title">Konfirmasi</h4>
+            <h4 id="ai-woo-sa-confirm-title">Mulai Obrolan Baru?</h4>
             <p id="ai-woo-sa-confirm-text"></p>
             <div class="ai-woo-sa-confirm-actions">
                 <button class="ai-woo-sa-confirm-btn cancel" id="ai-woo-sa-confirm-cancel">Batal</button>
-                <button class="ai-woo-sa-confirm-btn confirm" id="ai-woo-sa-confirm-ok">OK</button>
+                <button class="ai-woo-sa-confirm-btn confirm" id="ai-woo-sa-confirm-ok">Mulai Baru</button>
             </div>
         </div>
     </div>`;
 
 export const buildShellHtml = (botName: string): string => `
-    <div class="ai-woo-sa-chat-window" id="ai-woo-sa-window">
+    <div class="ai-woo-sa-chat-window" id="ai-woo-sa-window" role="dialog" aria-label="Konsultasi Kecantikan Shinyoung">
         ${buildHeader(botName)}
-        <div class="ai-woo-sa-body" id="ai-woo-sa-body"></div>
+        <div class="ai-woo-sa-body" id="ai-woo-sa-body" role="log" aria-live="polite" aria-atomic="false"></div>
+        <button class="ai-woo-sa-jump-btn" id="ai-woo-sa-jump-btn" type="button" aria-label="Lompat ke pesan terbaru" style="display:none;">
+            ${ICON_ARROW_DOWN}<span>Pesan baru</span>
+        </button>
         ${buildComposer()}
     </div>
     ${buildLauncher()}

@@ -1,0 +1,78 @@
+/* Chat Composer & Input Footer */
+.ai-woo-sa-footer {
+    padding: 12px 16px 14px 16px;
+    background: rgba(250, 247, 242, 0.95);
+    border-top: 1px solid var(--hairline);
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    position: relative;
+    z-index: 10;
+}
+
+.ai-woo-sa-composer {
+    display: flex;
+    align-items: center;
+    background: var(--porcelain);
+    border: 1px solid var(--hairline);
+    border-radius: var(--radius-pill);
+    padding: 4px 5px 4px 16px;
+    box-shadow: var(--shadow-sm);
+    transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.ai-woo-sa-composer:focus-within {
+    border-color: var(--champagne);
+    box-shadow: 0 0 0 3px rgba(183, 155, 106, 0.15);
+}
+
+.ai-woo-sa-input {
+    flex: 1;
+    border: none;
+    outline: none;
+    background: transparent;
+    font-size: 14.5px;
+    line-height: 1.4;
+    color: var(--ink);
+    padding: 8px 0;
+}
+
+.ai-woo-sa-input::placeholder {
+    color: var(--ink-soft);
+    opacity: 0.7;
+}
+
+.ai-woo-sa-send {
+    background: var(--forest);
+    color: var(--ivory);
+    border: none;
+    border-radius: var(--radius-pill);
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    flex-shrink: 0;
+    transition: background-color var(--transition-fast), transform var(--transition-fast), opacity var(--transition-fast);
+}
+
+.ai-woo-sa-send:hover:not(:disabled) {
+    background: var(--forest-hover);
+    transform: translateY(-1px);
+}
+
+.ai-woo-sa-send:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+    background: var(--bone);
+    color: var(--ink-soft);
+}
+
+.ai-woo-sa-disclaimer {
+    text-align: center;
+    font-size: 10.5px;
+    color: var(--ink-soft);
+    letter-spacing: 0.01em;
+    user-select: none;
+}

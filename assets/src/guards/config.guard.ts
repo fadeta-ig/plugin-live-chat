@@ -34,6 +34,7 @@ export const asWidgetConfig = (value: unknown): WidgetConfig | null => {
         nonce: toText(value.nonce),
         botName: toText(value.botName) || DEFAULT_BOT_NAME,
         waNumber: toText(value.waNumber),
+        checkoutUrl: toText(value.checkoutUrl),
         currentProduct: asCurrentProduct(value.currentProduct),
         cartItems: asCartItems(value.cartItems),
     };

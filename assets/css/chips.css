@@ -1,0 +1,50 @@
+/* Suggestion Chips & Quick Replies */
+.ai-woo-sa-quick-replies {
+    display: flex;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    gap: 8px;
+    padding: 6px 2px 8px;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    -webkit-mask-image: linear-gradient(to right, transparent 0%, black 12px, black calc(100% - 12px), transparent 100%);
+    mask-image: linear-gradient(to right, transparent 0%, black 12px, black calc(100% - 12px), transparent 100%);
+    animation: aiWooSaReveal var(--transition-normal);
+}
+
+.ai-woo-sa-quick-replies::-webkit-scrollbar {
+    display: none;
+}
+
+.ai-woo-sa-qr-btn {
+    min-height: 40px;
+    padding: 8px 16px;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    border: 1px solid var(--hairline);
+    border-radius: var(--radius-pill);
+    background: var(--porcelain);
+    color: var(--forest);
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    white-space: nowrap;
+    scroll-snap-align: start;
+    box-shadow: var(--shadow-sm);
+    flex-shrink: 0;
+}
+
+.ai-woo-sa-qr-btn:hover {
+    background: var(--forest);
+    color: var(--ivory);
+    border-color: var(--forest);
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-md);
+}
+
+.ai-woo-sa-qr-btn:active {
+    transform: scale(0.97);
+}

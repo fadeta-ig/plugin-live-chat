@@ -1,5 +1,6 @@
 import type { OrdersPayload, ProductPayload } from '../../types/chat.types';
 import { appendProductCard } from '../../ui/cards/product-card';
+import { appendProductCarousel } from '../../ui/cards/product-carousel';
 import { appendOrderCard } from '../../ui/cards/order-card';
 import { appendTrackingRedirectCard } from '../../ui/cards/link-cards';
 
@@ -16,7 +17,12 @@ export const renderRecommendedProducts = (
     products: ProductPayload[],
     recommendedIds: number[],
 ): void => {
-    products
-        .filter((product) => recommendedIds.includes(product.product_id))
-        .forEach((product) => appendProductCard(product));
+    const recommended = products.filter((p) => recommendedIds.includes(p.product_id));
+    if (recommended.length === 0) return;
+    if (recommended.length > 1) {
+        appendProductCarousel(recommended);
+        return;
+    }
+    const [first] = recommended;
+    if (first) appendProductCard(first);
 };

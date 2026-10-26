@@ -1,0 +1,90 @@
+/* Luxury Chat Header */
+.ai-woo-sa-header {
+    background: rgba(250, 247, 242, 0.9);
+    border-bottom: 1px solid var(--hairline);
+    padding: 14px 18px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
+    z-index: 10;
+}
+
+.ai-woo-sa-header-brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+.ai-woo-sa-avatar {
+    width: 38px;
+    height: 38px;
+    border-radius: var(--radius-pill);
+    background: var(--forest);
+    border: 1px solid var(--hairline-champagne);
+    color: var(--ivory);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: var(--shadow-sm);
+    flex-shrink: 0;
+}
+.ai-woo-sa-avatar-text {
+    font-family: var(--font-display);
+    font-size: 15px;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+}
+.ai-woo-sa-header-info { display: flex; flex-direction: column; }
+
+.ai-woo-sa-header-title {
+    font-family: var(--font-display);
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--ink);
+    line-height: 1.2;
+    letter-spacing: -0.01em;
+}
+
+.ai-woo-sa-header-status { display: flex; align-items: center; gap: 6px; margin-top: 2px; }
+.ai-woo-sa-status-dot {
+    width: 6px;
+    height: 6px;
+    background-color: var(--sage);
+    border-radius: var(--radius-pill);
+    box-shadow: 0 0 0 2px rgba(140, 155, 129, 0.25);
+}
+.ai-woo-sa-status-label {
+    font-size: 10px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--ink-soft);
+}
+.ai-woo-sa-header-actions { display: flex; align-items: center; gap: 4px; }
+
+.ai-woo-sa-header-btn {
+    position: relative;
+    width: 34px;
+    height: 34px;
+    background: transparent;
+    border: 1px solid transparent;
+    border-radius: var(--radius-pill);
+    color: var(--ink-soft);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background-color var(--transition-fast), color var(--transition-fast), border-color var(--transition-fast);
+}
+
+.ai-woo-sa-header-btn::after {
+    content: '';
+    position: absolute;
+    inset: -5px;
+}
+
+.ai-woo-sa-header-btn:hover {
+    background: var(--porcelain);
+    border-color: var(--hairline);
+    color: var(--ink);
+}

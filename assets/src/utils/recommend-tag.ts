@@ -1,4 +1,4 @@
-const RECOMMEND_PATTERN = /\[RECOMMEND:\s*([\d,\s]+)\]/;
+const ALL_RECOMMEND_PATTERN = /\[RECOMMEND:\s*([\d,\s]+)\]/g;
 const PARTIAL_RECOMMEND_PATTERN = /\[RECOMMEND:.*?(\]|$)/g;
 
 export interface Recommendation {
@@ -7,14 +7,17 @@ export interface Recommendation {
 }
 
 export const extractRecommendation = (text: string): Recommendation => {
-    const match = text.match(RECOMMEND_PATTERN);
-    if (!match) return { cleanText: text, productIds: [] };
-
-    const productIds = (match[1] ?? '')
-        .split(',')
-        .map((id) => parseInt(id.trim(), 10))
-        .filter((id) => !Number.isNaN(id));
-    return { cleanText: text.replace(match[0], ''), productIds };
+    const productIds: number[] = [];
+    const matches = text.matchAll(ALL_RECOMMEND_PATTERN);
+    for (const match of matches) {
+        const ids = (match[1] ?? '')
+            .split(',')
+            .map((id) => parseInt(id.trim(), 10))
+            .filter((id) => !Number.isNaN(id));
+        productIds.push(...ids);
+    }
+    const cleanText = text.replace(ALL_RECOMMEND_PATTERN, '');
+    return { cleanText, productIds };
 };
 
 /** Hides a (possibly still incomplete) recommend tag while text is streaming. */

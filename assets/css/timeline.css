@@ -1,0 +1,56 @@
+/* 4-Step Mini Timeline for Order Receipt */
+.ai-woo-sa-timeline {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
+    padding: 10px 4px 6px;
+    margin: 4px 0 6px;
+}
+
+.ai-woo-sa-timeline::before {
+    content: '';
+    position: absolute;
+    top: 17px;
+    left: 16px;
+    right: 16px;
+    height: 2px;
+    background: var(--bone);
+    z-index: 1;
+}
+
+.ai-woo-sa-timeline-step {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    position: relative;
+    z-index: 2;
+}
+
+.ai-woo-sa-timeline-dot {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: var(--porcelain);
+    border: 2px solid var(--hairline);
+    transition: all var(--transition-fast);
+}
+
+.ai-woo-sa-timeline-step.completed .ai-woo-sa-timeline-dot,
+.ai-woo-sa-timeline-step.active .ai-woo-sa-timeline-dot {
+    border-color: var(--forest);
+    background: var(--forest);
+    box-shadow: 0 0 0 3px rgba(30, 58, 47, 0.12);
+}
+
+.ai-woo-sa-timeline-label {
+    font-size: 10px;
+    font-weight: 500;
+    color: var(--ink-soft);
+}
+
+.ai-woo-sa-timeline-step.active .ai-woo-sa-timeline-label {
+    color: var(--forest);
+    font-weight: 600;
+}

@@ -1,0 +1,60 @@
+/* Floating Action Button (Launcher) */
+.ai-woo-sa-fab {
+    pointer-events: auto;
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 58px;
+    height: 58px;
+    border-radius: var(--radius-pill);
+    background: var(--forest);
+    color: var(--ivory);
+    border: 1px solid var(--hairline-champagne);
+    box-shadow: var(--shadow-md), 0 0 0 1px rgba(255, 255, 255, 0.15) inset;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: transform var(--transition-fast), background-color var(--transition-fast), box-shadow var(--transition-fast);
+    z-index: var(--z-fab);
+}
+
+.ai-woo-sa-fab:hover {
+    transform: translateY(-2px) scale(1.02);
+    background: var(--forest-hover);
+    box-shadow: var(--shadow-xl), 0 0 0 1px rgba(255, 255, 255, 0.25) inset;
+}
+
+.ai-woo-sa-fab:active {
+    transform: translateY(0) scale(0.98);
+}
+
+.ai-woo-sa-fab-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform var(--transition-normal);
+}
+
+.ai-woo-sa-fab.open .ai-woo-sa-fab-icon {
+    transform: rotate(90deg);
+}
+
+/* Subtle Champagne Unread Indicator */
+.ai-woo-sa-badge {
+    position: absolute;
+    top: 2px;
+    right: 2px;
+    background: var(--champagne);
+    color: var(--ivory);
+    font-size: 10px;
+    font-weight: 600;
+    width: 18px;
+    height: 18px;
+    border-radius: var(--radius-pill);
+    border: 2px solid var(--ivory);
+    box-shadow: var(--shadow-sm);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}

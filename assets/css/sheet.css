@@ -1,0 +1,93 @@
+/* Custom Confirmation Modal / Sheet */
+.ai-woo-sa-confirm-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(31, 42, 34, 0.4);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    z-index: var(--z-overlay);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity var(--transition-normal), visibility var(--transition-normal);
+    pointer-events: auto;
+}
+
+.ai-woo-sa-confirm-overlay.show {
+    opacity: 1;
+    visibility: visible;
+}
+
+.ai-woo-sa-confirm-box {
+    background: var(--porcelain);
+    padding: 26px 28px;
+    border-radius: var(--radius-card);
+    width: 88%;
+    max-width: 320px;
+    box-shadow: var(--shadow-xl);
+    border: 1px solid var(--hairline);
+    text-align: center;
+    transform: scale(0.95) translateY(8px);
+    transition: transform var(--transition-normal);
+}
+
+.ai-woo-sa-confirm-overlay.show .ai-woo-sa-confirm-box {
+    transform: scale(1) translateY(0);
+}
+
+.ai-woo-sa-confirm-box h4 {
+    font-family: var(--font-display);
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--ink);
+    margin-bottom: 8px;
+}
+
+.ai-woo-sa-confirm-box p {
+    font-size: 13.5px;
+    color: var(--ink-soft);
+    line-height: 1.5;
+    margin-bottom: 22px;
+}
+
+.ai-woo-sa-confirm-actions {
+    display: flex;
+    gap: 10px;
+}
+
+.ai-woo-sa-confirm-btn {
+    flex: 1;
+    padding: 10px 16px;
+    border-radius: var(--radius-pill);
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    border: 1px solid transparent;
+    transition: all var(--transition-fast);
+}
+
+.ai-woo-sa-confirm-btn.cancel {
+    background: var(--ivory);
+    color: var(--ink-soft);
+    border-color: var(--hairline);
+}
+
+.ai-woo-sa-confirm-btn.cancel:hover {
+    background: var(--bone);
+    color: var(--ink);
+}
+
+.ai-woo-sa-confirm-btn.confirm {
+    background: var(--clay);
+    color: var(--ivory);
+}
+
+.ai-woo-sa-confirm-btn.confirm:hover {
+    background: var(--clay-hover);
+    transform: translateY(-1px);
+}

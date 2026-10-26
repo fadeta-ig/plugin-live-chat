@@ -15,7 +15,8 @@ describe('boot and navigation', () => {
     it('mounts header, greeting and six quick replies', async () => {
         const widget = await bootWidget({ fetchHandler: () => jsonResponse({}) });
         assert.equal(widget.$('.ai-woo-sa-header h3').textContent, 'Shinyoung Assistant');
-        assert.match(widget.$('.ai-woo-sa-msg.bot p').textContent, /Halo! Saya Shinyoung Assistant/);
+        assert.match(widget.$('.ai-woo-sa-welcome-title').textContent, /Selamat datang/);
+        assert.equal(widget.$$('.ai-woo-sa-starter-row').length, 4);
         assert.equal(widget.$$('.ai-woo-sa-qr-btn').length, 6);
         widget.close();
     });

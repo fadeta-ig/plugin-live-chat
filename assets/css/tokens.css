@@ -1,0 +1,40 @@
+/* Design Tokens - Botanical Atelier Palette & Typography */
+#ai-woo-sa-widget-root {
+    --ivory: #FAF7F2;
+    --porcelain: #FFFFFF;
+    --bone: #F1ECE3;
+    --hairline: #E4DDD0;
+    --hairline-champagne: rgba(183, 155, 106, 0.35);
+
+    --ink: #1F2A22;
+    --ink-soft: #5B655D;
+    --forest: #2F3E34;
+    --forest-hover: #243129;
+    --sage: #8C9B81;
+    --champagne: #B79B6A;
+    --champagne-deep: #8A7248;
+    --clay: #A4493D;
+    --clay-hover: #8C3A30;
+
+    --font-display: 'Cormorant Garamond', Garamond, Georgia, serif;
+    --font-body: 'Manrope', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+
+    --radius-window: 24px;
+    --radius-card: 16px;
+    --radius-bubble: 18px;
+    --radius-btn: 12px;
+    --radius-pill: 9999px;
+
+    --shadow-sm: 0 2px 8px rgba(31, 42, 34, 0.04);
+    --shadow-md: 0 8px 24px -4px rgba(31, 42, 34, 0.08), 0 2px 6px rgba(31, 42, 34, 0.03);
+    --shadow-xl: 0 24px 48px -12px rgba(31, 42, 34, 0.16), 0 12px 24px -8px rgba(31, 42, 34, 0.08);
+
+    --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+    --transition-fast: 180ms var(--ease-out);
+    --transition-normal: 320ms var(--ease-out);
+    --transition-slow: 520ms var(--ease-out);
+
+    --z-fab: 999998;
+    --z-window: 999999;
+    --z-overlay: 1000000;
+}

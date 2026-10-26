@@ -1,0 +1,77 @@
+/* Chat Window Container */
+.ai-woo-sa-chat-window {
+    pointer-events: auto;
+    position: absolute;
+    bottom: 74px;
+    right: 0;
+    width: 390px;
+    max-width: calc(100vw - 32px);
+    height: 610px;
+    max-height: calc(100vh - 104px);
+    background: var(--ivory);
+    border: 1px solid var(--hairline);
+    border-radius: var(--radius-window);
+    box-shadow: var(--shadow-xl);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    opacity: 0;
+    transform: translateY(14px) scale(0.98);
+    transform-origin: bottom right;
+    transition: opacity var(--transition-normal), transform var(--transition-normal), visibility var(--transition-normal);
+    visibility: hidden;
+    z-index: var(--z-window);
+}
+
+@supports (backdrop-filter: blur(20px)) {
+    .ai-woo-sa-chat-window {
+        background: rgba(250, 247, 242, 0.94);
+        backdrop-filter: blur(20px) saturate(140%);
+        -webkit-backdrop-filter: blur(20px) saturate(140%);
+    }
+}
+
+.ai-woo-sa-chat-window.open {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    visibility: visible;
+}
+
+/* Chat Body (Message stream container) */
+.ai-woo-sa-body {
+    flex: 1;
+    padding: 20px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    scroll-behavior: smooth;
+    background: transparent;
+}
+
+/* Jump to latest floating button */
+.ai-woo-sa-jump-btn {
+    position: absolute;
+    bottom: 74px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 14px;
+    border-radius: var(--radius-pill);
+    background: var(--forest);
+    color: var(--ivory);
+    border: 1px solid var(--champagne);
+    font-size: 11.5px;
+    font-weight: 500;
+    box-shadow: var(--shadow-md);
+    cursor: pointer;
+    z-index: 10;
+    transition: all var(--transition-fast);
+}
+
+.ai-woo-sa-jump-btn:hover {
+    background: var(--forest-dark);
+    transform: translateX(-50%) translateY(-2px);
+}

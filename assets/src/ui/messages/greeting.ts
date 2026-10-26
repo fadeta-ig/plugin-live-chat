@@ -3,9 +3,7 @@ import { LAST_SEEN_PRODUCT_KEY } from '../../core/constants';
 import { escapeHtml } from '../../utils/escape-html';
 import { writeStorage } from '../../utils/safe-storage';
 import { appendMessage } from './append-message';
-
-const buildGenericGreeting = (botName: string): string =>
-    `<p>Halo! Saya ${escapeHtml(botName)}. Ada yang bisa saya bantu hari ini?</p>`;
+import { appendWelcomeScreen } from '../welcome/welcome-screen';
 
 const buildProductGreeting = (name: string, description: string): string => {
     let html = `<p>Halo Kak! Sedang melihat <strong>${escapeHtml(name)}</strong> ya?</p>`;
@@ -16,11 +14,11 @@ const buildProductGreeting = (name: string, description: string): string => {
 };
 
 export const initGreeting = (save = true): void => {
-    const { botName, currentProduct } = getConfig();
-    const greetingHtml = currentProduct
-        ? buildProductGreeting(currentProduct.name, currentProduct.desc)
-        : buildGenericGreeting(botName);
-
-    appendMessage(greetingHtml, 'bot', save, true);
-    if (currentProduct) writeStorage(LAST_SEEN_PRODUCT_KEY, String(currentProduct.id));
+    const { currentProduct } = getConfig();
+    if (currentProduct) {
+        appendMessage(buildProductGreeting(currentProduct.name, currentProduct.desc), 'bot', save, true);
+        writeStorage(LAST_SEEN_PRODUCT_KEY, String(currentProduct.id));
+        return;
+    }
+    appendWelcomeScreen(save);
 };

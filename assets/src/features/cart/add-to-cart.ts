@@ -1,5 +1,7 @@
 import { postAddToCart } from '../../api/cart.client';
 import { getConfig } from '../../core/config.store';
+import { escapeHtml } from '../../utils/escape-html';
+import { ICON_CHECK } from '../../ui/icons/icons';
 import {
     CART_BUTTON_ADDED,
     CART_BUTTON_ERROR,
@@ -46,8 +48,16 @@ export const addToCart = async (
             return;
         }
 
-        button.textContent = CART_BUTTON_ADDED;
+        button.innerHTML = `${ICON_CHECK} <span>${CART_BUTTON_ADDED}</span>`;
         button.classList.add('added');
+        const card = button.closest('.ai-woo-sa-product-card');
+        const postCart = card?.querySelector<HTMLElement>('.ai-woo-sa-post-cart');
+        const { checkoutUrl } = getConfig();
+        if (postCart && checkoutUrl) {
+            postCart.innerHTML = `<a href="${escapeHtml(checkoutUrl)}" class="ai-woo-sa-post-link">Selesaikan Pesanan &rarr;</a>`;
+            postCart.style.display = 'block';
+        }
+
         getConfig().cartItems.push({ id: productId, name: productTitle, qty: 1 });
         refreshWooCommerceFragments(button, result.fragments, result.cartHash);
         void sendMessage(buildCrossSellPrompt(productTitle), true);

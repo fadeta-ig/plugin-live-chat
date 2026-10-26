@@ -1,7 +1,7 @@
-export const CART_BUTTON_LABEL = '🛒 Tambah ke Keranjang';
+export const CART_BUTTON_LABEL = 'Tambah ke Keranjang';
 export const CART_BUTTON_PENDING = 'Menambahkan...';
-export const CART_BUTTON_ERROR = '⚠ Gagal, coba lagi';
-export const CART_BUTTON_ADDED = '✓ Ditambahkan!';
+export const CART_BUTTON_ERROR = 'Gagal, coba lagi';
+export const CART_BUTTON_ADDED = 'Ditambahkan';
 export const CART_ERROR_RESET_MS = 3000;
 
 export const SERVER_ERROR_MESSAGE = 'Maaf, terjadi kesalahan pada server. Silakan coba lagi nanti.';

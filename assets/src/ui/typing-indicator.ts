@@ -6,11 +6,9 @@ const PHASE_TWO_AT_S = 6;
 const TICK_MS = 1000;
 
 const buildTypingHtml = (label: string): string => `
-    <div class="ai-woo-sa-typing-text" style="font-size: 12px; margin-bottom: 4px; color: var(--text-light);">${label}</div>
-    <div class="ai-woo-sa-typing">
-        <div class="ai-woo-sa-dot"></div>
-        <div class="ai-woo-sa-dot"></div>
-        <div class="ai-woo-sa-dot"></div>
+    <div class="ai-woo-sa-typing-text">${label}</div>
+    <div class="ai-woo-sa-thinking-bar" aria-hidden="true">
+        <div class="ai-woo-sa-thinking-shimmer"></div>
     </div>`;
 
 let typingElement: HTMLDivElement | null = null;
@@ -18,8 +16,8 @@ let tickTimer: number | null = null;
 let delayTimer: number | null = null;
 
 const labelForElapsed = (elapsedSeconds: number): string | null => {
-    if (elapsedSeconds === PHASE_ONE_AT_S) return '🔍 Mencari produk terkait...';
-    if (elapsedSeconds === PHASE_TWO_AT_S) return '💬 Merangkai jawaban...';
+    if (elapsedSeconds === PHASE_ONE_AT_S) return 'Memilih formulasi terbaik...';
+    if (elapsedSeconds === PHASE_TWO_AT_S) return 'Menyusun rekomendasi...';
     return null;
 };
 
@@ -28,7 +26,9 @@ export const showTyping = (): void => {
     const element = document.createElement('div');
     element.className = 'ai-woo-sa-msg bot ai-woo-sa-typing-container';
     element.id = 'ai-woo-sa-typing';
-    element.innerHTML = buildTypingHtml('Sedang mengetik...');
+    element.setAttribute('role', 'status');
+    element.setAttribute('aria-live', 'polite');
+    element.innerHTML = buildTypingHtml('Memahami kebutuhan Anda...');
     typingElement = element;
     appendToChat(element);
 

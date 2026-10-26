@@ -11,6 +11,7 @@ export interface Elements {
     confirmText: HTMLElement;
     confirmCancel: HTMLButtonElement;
     confirmOk: HTMLButtonElement;
+    jumpBtn: HTMLButtonElement;
 }
 
 let boundElements: Elements | null = null;
@@ -37,6 +38,7 @@ export const bindElements = (): Elements => {
         confirmText: requireElement('ai-woo-sa-confirm-text', HTMLElement),
         confirmCancel: requireElement('ai-woo-sa-confirm-cancel', HTMLButtonElement),
         confirmOk: requireElement('ai-woo-sa-confirm-ok', HTMLButtonElement),
+        jumpBtn: requireElement('ai-woo-sa-jump-btn', HTMLButtonElement),
     };
     return boundElements;
 };

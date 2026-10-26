@@ -39,7 +39,7 @@ describe('history persistence', () => {
             fetchHandler: fullReply,
             storage: { [HISTORY_KEY]: '{not-json' },
         });
-        assert.match(widget.$('.ai-woo-sa-msg.bot p').textContent, /Halo! Saya/);
+        assert.match(widget.$('.ai-woo-sa-welcome-title').textContent, /Selamat datang/);
         widget.close();
     });
 
@@ -76,7 +76,7 @@ describe('reset', () => {
         assert.equal(widget.$$('.ai-woo-sa-msg.user').length, 0);
         assert.equal(widget.$$('.ai-woo-sa-product-card').length, 0);
         assert.notEqual(widget.window.localStorage.getItem(SESSION_KEY), oldSession);
-        assert.match(widget.$('.ai-woo-sa-msg.bot p').textContent, /Halo! Saya/);
+        assert.match(widget.$('.ai-woo-sa-welcome-title').textContent, /Selamat datang/);
         widget.close();
     });
 });

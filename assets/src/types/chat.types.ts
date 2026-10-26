@@ -1,21 +1,7 @@
-/**
- * Domain types. Server-sourced payloads keep the wire-format (snake_case) keys
- * so persisted history stays compatible with previously stored sessions.
- */
-
 export type Sender = 'bot' | 'user';
 
-export interface CurrentProduct {
-    id: number;
-    name: string;
-    desc: string;
-}
-
-export interface CartItem {
-    id: number;
-    name: string;
-    qty: number;
-}
+export interface CurrentProduct { id: number; name: string; desc: string; }
+export interface CartItem { id: number; name: string; qty: number; }
 
 export interface WidgetConfig {
     restUrl: string;
@@ -23,6 +9,7 @@ export interface WidgetConfig {
     botName: string;
     wcAjaxUrl: string;
     waNumber: string;
+    checkoutUrl: string;
     currentProduct: CurrentProduct | null;
     cartItems: CartItem[];
 }

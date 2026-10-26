@@ -71,6 +71,7 @@ class AI_Woo_SA_Prompt_Builder {
             "FORMAT JAWABAN:",
             "- Kalimat pertama langsung ke inti. Default 2-4 kalimat (maks sekitar 100 kata); perpanjang HANYA bila pengguna meminta penjelasan detail.",
             "- Maksimal 3 bullet bila perlu merinci. Tanpa heading dan tabel. Boleh **tebal** untuk nama produk.",
+            "- DILARANG KERAS MENGGUNAKAN EMOJI SAMA SEKALI. Gaya bahasa harus bersih, elegan, profesional, dan mewah (quiet luxury).",
             "- Jangan mengulang pertanyaan pengguna dan jangan menutup dengan basa-basi generik.",
         ) );
     }

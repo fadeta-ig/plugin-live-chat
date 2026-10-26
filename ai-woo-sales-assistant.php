@@ -2,7 +2,7 @@
 /**
  * Plugin Name: AI WooCommerce Sales Assistant
  * Description: AI-powered sales assistant using Gemini, Groq, and Pinecone with RAG architecture.
- * Version: 2.7.3
+ * Version: 2.7.5
  * Author: Fadeta Ilhan
  * Text Domain: ai-woo-sales-assistant
  */
@@ -11,7 +11,7 @@ if (!defined('ABSPATH')) {
     exit; // Exit if accessed directly.
 }
 
-define('AI_WOO_SA_VERSION', '2.7.3');
+define('AI_WOO_SA_VERSION', '2.7.5');
 define('AI_WOO_SA_PLUGIN_DIR', plugin_dir_path(__FILE__));
 define('AI_WOO_SA_PLUGIN_URL', plugin_dir_url(__FILE__));
 
@@ -81,6 +81,7 @@ final class AI_Woo_Sales_Assistant
     private function init_hooks()
     {
         add_action('wp_enqueue_scripts', array($this, 'enqueue_scripts'));
+        add_filter('wp_resource_hints', array($this, 'add_font_resource_hints'), 10, 2);
         add_action('wp_footer', array($this, 'render_widget_html'));
 
         // Initialize Admin
@@ -141,11 +142,42 @@ final class AI_Woo_Sales_Assistant
         return $modified_time ? (string) $modified_time : AI_WOO_SA_VERSION;
     }
 
+    /**
+     * Add preconnect for Google Fonts to improve load speed.
+     *
+     * @param array  $urls          URLs to print for resource hints.
+     * @param string $relation_type The relation type the URLs are printed for.
+     * @return array
+     */
+    public function add_font_resource_hints($urls, $relation_type)
+    {
+        if ('preconnect' === $relation_type) {
+            $urls[] = array(
+                'href' => 'https://fonts.googleapis.com',
+            );
+            $urls[] = array(
+                'href' => 'https://fonts.gstatic.com',
+                'crossorigin' => 'anonymous',
+            );
+        }
+        return $urls;
+    }
+
     public function enqueue_scripts()
     {
-        $css_version = $this->get_asset_version('assets/css/widget.css');
+        // Enqueue luxury typography (Cormorant Garamond + Manrope)
+        wp_enqueue_style(
+            'ai-woo-sa-google-fonts',
+            'https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Manrope:wght@400;500;600&display=swap',
+            array(),
+            null
+        );
+
+        $css_rel = file_exists(AI_WOO_SA_PLUGIN_DIR . 'assets/dist/widget.css') ? 'assets/dist/widget.css' : 'assets/css/widget.css';
+        $css_version = $this->get_asset_version($css_rel);
         $js_version = $this->get_asset_version('assets/dist/widget.js');
-        wp_enqueue_style('ai-woo-sa-widget-css', AI_WOO_SA_PLUGIN_URL . 'assets/css/widget.css', array(), $css_version);
+
+        wp_enqueue_style('ai-woo-sa-widget-css', AI_WOO_SA_PLUGIN_URL . $css_rel, array('ai-woo-sa-google-fonts'), $css_version);
         wp_enqueue_script('ai-woo-sa-widget-js', AI_WOO_SA_PLUGIN_URL . 'assets/dist/widget.js', array(), $js_version, array('in_footer' => true, 'strategy' => 'defer'));
 
         $options = get_option('ai_woo_sa_settings');

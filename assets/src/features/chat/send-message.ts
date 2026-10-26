@@ -10,13 +10,14 @@ import { getElements } from '../../ui/elements';
 import { CONNECTION_ERROR_MESSAGE, SERVER_ERROR_MESSAGE } from '../../ui/labels';
 import { appendMessage } from '../../ui/messages/append-message';
 import { removeTyping, showTyping, showTypingDelayed } from '../../ui/typing-indicator';
+import { appendErrorCard } from '../../ui/cards/error-card';
 import { handleJsonReply } from './handle-json-reply';
 import { handleStreamReply } from './handle-stream-reply';
 
-const deliverReply = async (response: Response): Promise<void> => {
+const deliverReply = async (response: Response, retryQuery?: string): Promise<void> => {
     if (!response.ok) {
         console.error('AI Chat Error:', response.status, response.statusText);
-        appendMessage(SERVER_ERROR_MESSAGE, 'bot', false);
+        appendErrorCard(SERVER_ERROR_MESSAGE, retryQuery ? () => void sendMessage(retryQuery) : undefined);
         emitSignal(EVENT_SHOW_INITIAL_QUICK_REPLIES);
         return;
     }
@@ -63,10 +64,10 @@ export const sendMessage = async (
     try {
         const response = await requestChat(text);
         removeTyping();
-        await deliverReply(response);
+        await deliverReply(response, text);
     } catch (error) {
         removeTyping();
-        appendMessage(CONNECTION_ERROR_MESSAGE, 'bot');
+        appendErrorCard(CONNECTION_ERROR_MESSAGE, () => void sendMessage(text, isHiddenPrompt));
         console.error('AI Sales Assistant Error:', error);
         emitSignal(EVENT_SHOW_INITIAL_QUICK_REPLIES);
     } finally {

@@ -13,7 +13,7 @@ const buildImageHtml = (product: ProductPayload, safeTitle: string): string => {
     return `<img src="${escapeHtml(imageUrl)}" alt="${safeTitle}" class="ai-woo-sa-product-image" loading="lazy" />`;
 };
 
-export const appendProductCard = (product: ProductPayload, save = true): void => {
+export const buildProductCardElement = (product: ProductPayload): HTMLElement => {
     const card = document.createElement('div');
     card.className = 'ai-woo-sa-product-card';
     const safeTitle = escapeHtml(product.title);
@@ -24,8 +24,11 @@ export const appendProductCard = (product: ProductPayload, save = true): void =>
         <div class="ai-woo-sa-product-title">${safeTitle}</div>
         <div class="ai-woo-sa-product-price">Rp ${formatRupiah(product.price)}</div>
         <div class="ai-woo-sa-product-actions">
-            <button class="ai-woo-sa-btn-cart" data-product-id="${product.product_id}">${CART_BUTTON_LABEL}</button>
-            <a href="${permalink}" target="_blank" rel="noopener noreferrer" class="ai-woo-sa-btn-link">Lihat Produk</a>
+            <div class="ai-woo-sa-product-buttons">
+                <button class="ai-woo-sa-btn-cart" data-product-id="${product.product_id}">${CART_BUTTON_LABEL}</button>
+                <a href="${permalink}" target="_blank" rel="noopener noreferrer" class="ai-woo-sa-btn-link">Lihat</a>
+            </div>
+            <div class="ai-woo-sa-post-cart" style="display:none;"></div>
         </div>`;
 
     const cartButton = card.querySelector<HTMLButtonElement>('.ai-woo-sa-btn-cart');
@@ -38,7 +41,11 @@ export const appendProductCard = (product: ProductPayload, save = true): void =>
             }),
         );
     }
+    return card;
+};
 
+export const appendProductCard = (product: ProductPayload, save = true): void => {
+    const card = buildProductCardElement(product);
     appendToChat(card);
     if (!save) return;
     pushHistory({ type: 'product', data: product });

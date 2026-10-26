@@ -1,0 +1,61 @@
+/* Base Reset & Scoped Defaults */
+#ai-woo-sa-widget-root {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    z-index: var(--z-window);
+    pointer-events: none;
+    font-family: var(--font-body);
+    font-size: 14px;
+    line-height: 1.55;
+    color: var(--ink);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+#ai-woo-sa-widget-root *,
+#ai-woo-sa-widget-root *::before,
+#ai-woo-sa-widget-root *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+#ai-woo-sa-widget-root button,
+#ai-woo-sa-widget-root input {
+    font-family: inherit;
+    font-size: inherit;
+    color: inherit;
+}
+
+#ai-woo-sa-widget-root :focus-visible {
+    outline: 2px solid var(--champagne);
+    outline-offset: 2px;
+}
+
+/* Custom Slim Scrollbar */
+.ai-woo-sa-body::-webkit-scrollbar {
+    width: 5px;
+}
+
+.ai-woo-sa-body::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.ai-woo-sa-body::-webkit-scrollbar-thumb {
+    background: rgba(31, 42, 34, 0.12);
+    border-radius: var(--radius-pill);
+}
+
+.ai-woo-sa-body::-webkit-scrollbar-thumb:hover {
+    background: rgba(31, 42, 34, 0.22);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    #ai-woo-sa-widget-root * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+}
