@@ -35,6 +35,11 @@ export const restoreConversation = (): void => {
         initGreeting(true);
         return;
     }
+    const hasUserInteraction = stored.some((item) => item.type === 'msg' && item.sender === 'user');
+    if (!hasUserInteraction) {
+        initGreeting(true);
+        return;
+    }
     stored.forEach(replayItem);
     window.setTimeout(injectContextNudge, CONTEXT_NUDGE_DELAY_MS);
 };

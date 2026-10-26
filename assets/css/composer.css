@@ -1,60 +1,73 @@
-/* Chat Composer & Input Footer */
-.ai-woo-sa-footer {
-    padding: 12px 16px 14px 16px;
-    background: rgba(250, 247, 242, 0.95);
+#ai-woo-sa-widget-root .ai-woo-sa-footer {
+    padding: 10px 16px 12px 16px;
+    background: #FAF7F2 !important;
     border-top: 1px solid var(--hairline);
     display: flex;
     flex-direction: column;
-    gap: 8px;
+    gap: 6px;
     position: relative;
     z-index: 10;
 }
 
-.ai-woo-sa-composer {
-    display: flex;
-    align-items: center;
-    background: var(--porcelain);
-    border: 1px solid var(--hairline);
-    border-radius: var(--radius-pill);
-    padding: 4px 5px 4px 16px;
-    box-shadow: var(--shadow-sm);
+#ai-woo-sa-widget-root .ai-woo-sa-composer {
+    display: flex !important;
+    align-items: center !important;
+    background: var(--porcelain) !important;
+    border: 1px solid var(--hairline) !important;
+    border-radius: var(--radius-pill) !important;
+    padding: 3px 4px 3px 14px !important;
+    box-shadow: var(--shadow-sm) !important;
     transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
 }
 
-.ai-woo-sa-composer:focus-within {
-    border-color: var(--champagne);
-    box-shadow: 0 0 0 3px rgba(183, 155, 106, 0.15);
+#ai-woo-sa-widget-root .ai-woo-sa-composer:focus-within {
+    border-color: var(--champagne) !important;
+    box-shadow: 0 0 0 3px rgba(183, 155, 106, 0.15) !important;
 }
 
-.ai-woo-sa-input {
-    flex: 1;
-    border: none;
-    outline: none;
-    background: transparent;
-    font-size: 14.5px;
-    line-height: 1.4;
-    color: var(--ink);
-    padding: 8px 0;
+#ai-woo-sa-widget-root input.ai-woo-sa-input {
+    flex: 1 1 auto;
+    width: 100%;
+    min-width: 0;
+    border: none !important;
+    outline: none !important;
+    background: transparent !important;
+    box-shadow: none !important;
+    font-size: 13.5px !important;
+    line-height: 1.4 !important;
+    color: var(--ink) !important;
+    padding: 7px 4px 7px 0 !important;
+    margin: 0 !important;
+    height: auto !important;
+    min-height: 0 !important;
+    max-height: none !important;
 }
 
-.ai-woo-sa-input::placeholder {
+#ai-woo-sa-widget-root input.ai-woo-sa-input::placeholder {
     color: var(--ink-soft);
     opacity: 0.7;
 }
 
-.ai-woo-sa-send {
+#ai-woo-sa-widget-root .ai-woo-sa-send {
     background: var(--forest);
     color: var(--ivory);
-    border: none;
-    border-radius: var(--radius-pill);
-    width: 36px;
-    height: 36px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    border: none !important;
+    border-radius: var(--radius-pill) !important;
+    width: 34px !important;
+    height: 34px !important;
+    min-width: 34px !important;
+    min-height: 34px !important;
+    max-width: 34px !important;
+    max-height: 34px !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
     cursor: pointer;
     flex-shrink: 0;
-    transition: background-color var(--transition-fast), transform var(--transition-fast), opacity var(--transition-fast);
+    box-shadow: none !important;
+    transition: background-color var(--transition-fast), transform var(--transition-fast);
 }
 
 .ai-woo-sa-send:hover:not(:disabled) {

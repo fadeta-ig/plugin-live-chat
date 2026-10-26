@@ -8,7 +8,7 @@ import { appendWelcomeScreen } from '../welcome/welcome-screen';
 const buildProductGreeting = (name: string, description: string): string => {
     let html = `<p>Halo Kak! Sedang melihat <strong>${escapeHtml(name)}</strong> ya?</p>`;
     if (description) {
-        html += `<p style="font-size: 13px; color: var(--text-light); margin-top: 4px;"><em>${escapeHtml(description)}</em></p>`;
+        html += `<p style="font-size: 13px; color: var(--ink-soft); margin-top: 4px;"><em>${escapeHtml(description)}</em></p>`;
     }
     return `${html}<p style="margin-top: 4px;">Ada yang ingin ditanyakan tentang produk ini?</p>`;
 };

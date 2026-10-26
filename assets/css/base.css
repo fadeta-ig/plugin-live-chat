@@ -16,16 +16,30 @@
 #ai-woo-sa-widget-root *,
 #ai-woo-sa-widget-root *::before,
 #ai-woo-sa-widget-root *::after {
-    box-sizing: border-box;
+    box-sizing: border-box !important;
     margin: 0;
     padding: 0;
 }
 
 #ai-woo-sa-widget-root button,
-#ai-woo-sa-widget-root input {
-    font-family: inherit;
+#ai-woo-sa-widget-root input,
+#ai-woo-sa-widget-root textarea {
+    font-family: var(--font-body);
     font-size: inherit;
     color: inherit;
+    line-height: inherit;
+    letter-spacing: normal;
+    text-transform: none;
+    background: transparent;
+    border: none;
+    outline: none;
+    box-shadow: none;
+}
+
+#ai-woo-sa-widget-root button::before,
+#ai-woo-sa-widget-root button::after {
+    display: none !important;
+    content: none !important;
 }
 
 #ai-woo-sa-widget-root :focus-visible {

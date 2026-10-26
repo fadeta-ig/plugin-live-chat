@@ -17,7 +17,9 @@
     --clay-hover: #8C3A30;
 
     --font-display: 'Cormorant Garamond', Garamond, Georgia, serif;
+    --font-serif: 'Cormorant Garamond', Garamond, Georgia, serif;
     --font-body: 'Manrope', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
 
     --radius-window: 24px;
     --radius-card: 16px;

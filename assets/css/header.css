@@ -1,6 +1,6 @@
 /* Luxury Chat Header */
 .ai-woo-sa-header {
-    background: rgba(250, 247, 242, 0.9);
+    background: #FAF7F2 !important;
     border-bottom: 1px solid var(--hairline);
     padding: 14px 18px;
     display: flex;
