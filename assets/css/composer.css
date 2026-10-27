@@ -4,15 +4,19 @@
   border-top: 1px solid var(--hairline);
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 8px;
   flex: 0 0 auto;
   position: relative;
   z-index: 10;
 }
 #ai-woo-sa-widget-root .ai-woo-sa-composer-label {
-  color: var(--ink-soft);
-  font-size: 11px;
-  font-weight: 600;
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
 }
 #ai-woo-sa-widget-root .ai-woo-sa-composer {
   display: flex;
@@ -20,13 +24,13 @@
   gap: 6px;
   background: var(--ivory);
   border: 1px solid var(--hairline);
-  border-radius: 14px;
+  border-radius: 12px;
   padding: 5px 5px 5px 14px;
   transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
 }
 #ai-woo-sa-widget-root .ai-woo-sa-composer:focus-within {
-  border-color: var(--champagne-deep);
-  box-shadow: 0 0 0 3px rgba(183, 155, 106, .12);
+  border-color: var(--sage-deep);
+  box-shadow: 0 0 0 3px rgba(181, 196, 169, .3);
 }
 #ai-woo-sa-widget-root input.ai-woo-sa-input {
   flex: 1 1 auto;
@@ -51,13 +55,13 @@
   opacity: 1;
 }
 #ai-woo-sa-widget-root .ai-woo-sa-send {
-  background: var(--forest);
-  color: var(--ivory);
+  background: var(--sage);
+  color: var(--on-sage);
   border: none;
   border-radius: 10px;
-  width: 42px;
-  height: 42px;
-  min-width: 42px;
+  width: 44px;
+  height: 44px;
+  min-width: 44px;
   padding: 0;
   display: inline-flex;
   align-items: center;
@@ -67,7 +71,7 @@
   transition: background-color var(--transition-fast);
 }
 #ai-woo-sa-widget-root .ai-woo-sa-send:hover:not(:disabled) {
-  background: var(--forest-hover);
+  background: var(--sage-hover);
 }
 #ai-woo-sa-widget-root .ai-woo-sa-send:disabled {
   opacity: .5;

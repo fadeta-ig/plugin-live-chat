@@ -81,10 +81,10 @@
   background: var(--ivory);
 }
 #ai-woo-sa-widget-root .ai-woo-sa-confirm-btn.confirm {
-  background: var(--forest);
-  border-color: var(--forest);
-  color: var(--porcelain);
+  background: var(--sage);
+  border-color: var(--sage);
+  color: var(--on-sage);
 }
 #ai-woo-sa-widget-root .ai-woo-sa-confirm-btn.confirm:hover {
-  background: var(--forest-hover);
+  background: var(--sage-hover);
 }

@@ -10,8 +10,8 @@
     padding: 0 18px;
     gap: 10px;
     border-radius: var(--radius-pill);
-    background: var(--forest);
-    color: var(--ivory);
+    background: var(--sage);
+    color: var(--on-sage);
     border: 1px solid var(--hairline-champagne);
     box-shadow: var(--shadow-md), 0 0 0 1px rgba(255, 255, 255, 0.15) inset;
     display: flex;
@@ -37,7 +37,7 @@
 
 #ai-woo-sa-widget-root .ai-woo-sa-fab:hover {
     transform: translateY(-2px) scale(1.02);
-    background: var(--forest-hover);
+    background: var(--sage-hover);
     box-shadow: var(--shadow-xl), 0 0 0 1px rgba(255, 255, 255, 0.25) inset;
 }
 

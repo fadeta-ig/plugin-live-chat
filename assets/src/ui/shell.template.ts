@@ -11,12 +11,12 @@ const buildHeader = (botName: string): string => `
     <header class="ai-woo-sa-header">
         <div class="ai-woo-sa-header-brand">
             <div class="ai-woo-sa-avatar" aria-hidden="true">
-                <span class="ai-woo-sa-avatar-text">SA</span>
+                <span class="ai-woo-sa-avatar-text">S</span>
             </div>
             <div class="ai-woo-sa-header-info">
                 <h3 class="ai-woo-sa-header-title">${escapeHtml(botName)}</h3>
                 <div class="ai-woo-sa-header-status">
-                    <span class="ai-woo-sa-status-label">Asisten belanja AI</span>
+                    <span class="ai-woo-sa-status-label">Perawatan kulit &amp; rambut</span>
                 </div>
             </div>
         </div>
@@ -32,7 +32,7 @@ const buildHeader = (botName: string): string => `
 
 const buildComposer = (): string => `
     <footer class="ai-woo-sa-footer">
-        <label class="ai-woo-sa-composer-label" for="ai-woo-sa-input">Atau tulis pertanyaan Anda</label>
+        <label class="ai-woo-sa-composer-label" for="ai-woo-sa-input">Pesan Anda</label>
         <div class="ai-woo-sa-composer">
             <input type="text" id="ai-woo-sa-input" class="ai-woo-sa-input" placeholder="Tulis pesan di sini..." autocomplete="off" aria-label="Pesan Anda" />
             <button type="button" class="ai-woo-sa-send" id="ai-woo-sa-send-btn" aria-label="Kirim pesan" title="Kirim">
@@ -40,7 +40,7 @@ const buildComposer = (): string => `
             </button>
         </div>
         <div class="ai-woo-sa-disclaimer">
-            <span>Asisten AI Shinyoung. Butuh bantuan langsung? Hubungi CS.</span>
+            <span>Asisten AI Shinyoung · Perawatan dimulai dari percakapan.</span>
         </div>
     </footer>`;
 

@@ -1,6 +1,6 @@
 {
   "name": "ai-woo-sales-assistant-widget",
-  "version": "2.7.8",
+  "version": "2.7.9",
   "private": true,
   "description": "Frontend widget source (TypeScript) for the AI WooCommerce Sales Assistant plugin.",
   "scripts": {

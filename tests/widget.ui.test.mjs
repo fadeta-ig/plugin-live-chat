@@ -32,10 +32,12 @@ it('uses the same mobile breakpoint for viewport height and restores page scroll
     const widget = await bootWidget({ fetchHandler: () => jsonResponse({}) });
     Object.defineProperty(widget.window, 'innerWidth', { value: 600, configurable: true });
     widget.window.document.body.style.overflow = 'auto';
+    widget.$('#ai-woo-sa-body').scrollTop = 120;
     widget.$('#ai-woo-sa-fab').click();
     const chat = widget.$('#ai-woo-sa-window');
     assert.equal(chat.getAttribute('aria-modal'), 'true');
     assert.equal(widget.window.document.body.style.overflow, 'hidden');
+    assert.equal(widget.$('#ai-woo-sa-body').scrollTop, 0);
     assert.notEqual(widget.window.document.activeElement, widget.$('#ai-woo-sa-input'));
     widget.$('#ai-woo-sa-close-btn').click();
     assert.equal(widget.window.document.body.style.overflow, 'auto');

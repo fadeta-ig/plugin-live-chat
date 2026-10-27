@@ -16,8 +16,8 @@ import { renderOrders, renderRecommendedProducts } from './render-attachments';
 const needsHumanFallback = (text: string): boolean =>
     HUMAN_FALLBACK_TOKENS.some((token) => text.includes(token));
 
-/** Accumulates a streamed bot reply into a single paragraph element. */
-export const createStreamSession = (paragraph: HTMLParagraphElement) => {
+/** Uses the same block container and renderer for streaming and restored replies. */
+export const createStreamSession = (content: HTMLDivElement) => {
     let accumulatedText = '';
     let contextProducts: ProductPayload[] = [];
 
@@ -27,18 +27,18 @@ export const createStreamSession = (paragraph: HTMLParagraphElement) => {
         if (event.fallback && event.waLink) appendWhatsAppCard(event.waLink);
     };
 
-    const handleToken = (content: string): StreamControl => {
-        accumulatedText += content;
+    const handleToken = (token: string): StreamControl => {
+        accumulatedText += token;
 
         if (needsHumanFallback(accumulatedText)) {
             accumulatedText = HUMAN_FALLBACK_MESSAGE;
-            paragraph.textContent = accumulatedText;
+            content.textContent = accumulatedText;
             scrollToBottom();
             appendWhatsAppCard(buildWhatsAppUrl(getConfig().waNumber), true);
             return 'abort';
         }
 
-        paragraph.innerHTML = applyInlineMarkup(
+        content.innerHTML = applyInlineMarkup(
             stripPartialRecommendation(escapeHtml(accumulatedText)),
         );
         scrollToBottom();
@@ -48,7 +48,7 @@ export const createStreamSession = (paragraph: HTMLParagraphElement) => {
     const finalize = (): void => {
         if (!accumulatedText) return;
         const { cleanText, productIds } = extractRecommendation(accumulatedText);
-        paragraph.innerHTML = renderPlainMessage(cleanText);
+        content.innerHTML = renderPlainMessage(cleanText);
 
         pushHistory({ type: 'msg', text: cleanText, sender: 'bot', isRawHtml: false });
         saveHistory();

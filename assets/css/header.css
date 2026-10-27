@@ -1,6 +1,6 @@
-/* Luxury Chat Header */
+/* A quiet brand masthead, with controls on a consistent touch grid. */
 #ai-woo-sa-widget-root .ai-woo-sa-header {
-    background: var(--porcelain) !important;
+    background: var(--bone) !important;
     border-bottom: 1px solid var(--hairline);
     padding: 18px 20px;
     flex: 0 0 auto;
@@ -22,40 +22,32 @@
     width: 42px;
     height: 42px;
     border-radius: var(--radius-pill);
-    background: var(--forest);
+    background: var(--sage);
     border: 1px solid var(--hairline-champagne);
-    color: var(--ivory);
+    color: var(--on-sage);
     display: flex;
     align-items: center;
     justify-content: center;
-    box-shadow: var(--shadow-sm);
     flex-shrink: 0;
 }
 #ai-woo-sa-widget-root .ai-woo-sa-avatar-text {
     font-family: var(--font-display);
-    font-size: 15px;
-    font-weight: 600;
-    letter-spacing: 0.05em;
+    font-size: 28px;
+    font-weight: 500;
+    letter-spacing: 0;
 }
-#ai-woo-sa-widget-root .ai-woo-sa-header-info { display: flex; flex-direction: column; min-width: 0; gap: 4px; }
+#ai-woo-sa-widget-root .ai-woo-sa-header-info { display: flex; flex-direction: column; min-width: 0; gap: 3px; }
 
 #ai-woo-sa-widget-root .ai-woo-sa-header-title {
     font-family: var(--font-display);
     font-size: 21px;
-    font-weight: 600;
+    font-weight: 500;
     color: var(--ink);
     line-height: 1.15;
     letter-spacing: -0.01em;
 }
 
-#ai-woo-sa-widget-root .ai-woo-sa-header-status { display: flex; align-items: center; gap: 6px; margin-top: 2px; }
-#ai-woo-sa-widget-root .ai-woo-sa-status-dot {
-    width: 6px;
-    height: 6px;
-    background-color: var(--sage);
-    border-radius: var(--radius-pill);
-    box-shadow: 0 0 0 2px rgba(140, 155, 129, 0.25);
-}
+#ai-woo-sa-widget-root .ai-woo-sa-header-status { display: flex; align-items: center; }
 #ai-woo-sa-widget-root .ai-woo-sa-status-label {
     font-size: 11px;
     font-weight: 500;

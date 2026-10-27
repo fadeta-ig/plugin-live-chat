@@ -12,7 +12,7 @@
     background: var(--ivory) !important;
     border: 1px solid var(--hairline);
     border-radius: var(--radius-window);
-    box-shadow: 0 16px 48px -8px rgba(31, 42, 34, 0.22), 0 4px 16px rgba(31, 42, 34, 0.08);
+    box-shadow: 0 20px 64px -12px rgba(48, 59, 43, .18), 0 4px 16px rgba(48, 59, 43, .06);
     display: flex;
     flex-direction: column;
     overflow: hidden;
@@ -61,9 +61,9 @@
     gap: 6px;
     padding: 7px 16px;
     border-radius: var(--radius-pill);
-    background: var(--forest) !important;
-    color: var(--ivory) !important;
-    border: 1px solid var(--champagne) !important;
+    background: var(--sage) !important;
+    color: var(--on-sage) !important;
+    border: 1px solid var(--hairline-champagne) !important;
     font-size: 11.5px !important;
     font-weight: 500 !important;
     box-shadow: 0 4px 16px rgba(31, 42, 34, 0.22) !important;
@@ -73,6 +73,6 @@
 }
 
 #ai-woo-sa-widget-root .ai-woo-sa-jump-btn:hover {
-    background: var(--forest-hover) !important;
+    background: var(--sage-hover) !important;
     transform: translateX(-50%) translateY(-2px);
 }

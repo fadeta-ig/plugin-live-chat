@@ -55,8 +55,8 @@
     align-items: center !important;
     justify-content: center !important;
     gap: 6px !important;
-    background: var(--forest) !important;
-    color: var(--ivory) !important;
+    background: var(--sage) !important;
+    color: var(--on-sage) !important;
     padding: 9px 14px !important;
     border-radius: var(--radius-pill) !important;
     border: none !important;
@@ -67,12 +67,12 @@
 }
 
 #ai-woo-sa-widget-root .ai-woo-sa-btn-cart:hover:not(:disabled) {
-    background: var(--forest-hover);
+    background: var(--sage-hover) !important;
     transform: translateY(-1px);
 }
 
 #ai-woo-sa-widget-root .ai-woo-sa-btn-cart.added {
-    background: var(--forest);
+    background: var(--sage);
     opacity: 0.9;
 }
 

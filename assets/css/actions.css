@@ -5,8 +5,8 @@
     align-items: center;
     justify-content: center;
     gap: 8px;
-    background: var(--forest);
-    color: var(--ivory);
+    background: var(--sage);
+    color: var(--on-sage);
     padding: 10px 14px;
     border-radius: var(--radius-pill);
     text-decoration: none;
@@ -17,7 +17,7 @@
 
 #ai-woo-sa-widget-root .ai-woo-sa-btn-wa:hover,
 #ai-woo-sa-widget-root .ai-woo-sa-btn-tracking:hover {
-    background: var(--forest-hover);
+    background: var(--sage-hover);
     transform: translateY(-1px);
 }
 
@@ -43,8 +43,8 @@
 #ai-woo-sa-widget-root .ai-woo-sa-btn-spinner {
     width: 12px;
     height: 12px;
-    border: 2px solid rgba(255, 255, 255, 0.4);
-    border-top-color: var(--ivory);
+    border: 2px solid var(--sage-deep);
+    border-top-color: transparent;
     border-radius: var(--radius-pill);
     animation: aiWooSaSpin 0.6s linear infinite;
 }

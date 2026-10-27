@@ -15,6 +15,7 @@ main{padding:48px;max-width:580px}main small{letter-spacing:.15em;font-size:11px
 /* Representative host-theme rules must not erase the widget's own spacing. */
 button{padding:18px 28px;background:#111;color:white;border-radius:30px;font:700 20px/1.2 Georgia;letter-spacing:.1em;text-transform:uppercase}
 h2,h3,h4{margin:24px 0;color:#111;font:700 40px/1.1 Georgia}p{margin:0 0 24px}input[type=text]{padding:20px;border:2px solid #111;background:#ddd;width:100%;font-size:20px}svg{vertical-align:middle}
+ul,ol{margin:24px 0;padding-left:40px;list-style-position:inside}li{margin-bottom:24px;padding-left:12px;line-height:2}
 @media(max-width:640px){main{padding:24px}main h1{font-size:44px}}
 </style><link rel="stylesheet" href="/assets/dist/widget.css">
 </head><body><main><small>SHINYOUNG / LOCAL PREVIEW</small><h1>Care, thoughtfully<br>chosen.</h1><p>Preview tampilan widget. Pesan dan produk di sini adalah data contoh untuk pemeriksaan lokal.</p></main>
@@ -26,7 +27,7 @@ http.createServer(async (req, res) => {
     const path = new URL(req.url, 'http://localhost').pathname;
     if (path === '/chat' && req.method === 'POST') {
         res.writeHead(200, { 'Content-Type': 'application/json' });
-        res.end(JSON.stringify({ text: 'Tentu, kami siap membantu. Ceritakan kebutuhan perawatan kulit atau rambut Anda, lalu kami bantu memilih produk yang sesuai.\n\nAnda juga dapat memilih **Produk Kami** untuk menjelajahi kategori perawatan.' }));
+        res.end(JSON.stringify({ text: 'Untuk rambut yang terasa kering, Anda dapat memadukan **Shampoo Anti Ketombe** dan **Hair Serum Anti Ketombe** sebagai langkah perawatan.\n\n- **Triple Ferment** menutrisi akar dan membantu merawat barrier kulit kepala.\n\n- **Pro-Vitamin B5** membantu menjaga kelembapan rambut.\n\n- **Panthenol** pada serum membantu melembapkan helai rambut yang kering.\n\nCeritakan kondisi rambut Anda agar kami dapat membantu memilih perawatan yang sesuai.' }));
         return;
     }
     if (path === '/' || path === '/preview') {

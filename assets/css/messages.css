@@ -1,7 +1,7 @@
 /* Message Bubbles & Typing State */
 #ai-woo-sa-widget-root .ai-woo-sa-msg {
-    max-width: 90% !important;
-    padding: 12px 16px !important;
+    max-width: 94% !important;
+    padding: 14px 16px !important;
     border-radius: var(--radius-bubble) !important;
     animation: aiWooSaReveal var(--transition-normal);
     position: relative;
@@ -14,11 +14,11 @@
 }
 #ai-woo-sa-widget-root .ai-woo-sa-msg.bot {
     align-self: flex-start !important;
-    background: #FFFFFF !important;
+    background: var(--porcelain) !important;
     border: 1px solid var(--hairline) !important;
     border-bottom-left-radius: 4px !important;
     color: var(--ink) !important;
-    box-shadow: 0 2px 10px rgba(31, 42, 34, 0.05) !important;
+    box-shadow: none !important;
 }
 #ai-woo-sa-widget-root .ai-woo-sa-msg.ai-woo-sa-msg-welcome,
 #ai-woo-sa-widget-root .ai-woo-sa-msg:has(.ai-woo-sa-welcome) {
@@ -37,30 +37,69 @@
 }
 #ai-woo-sa-widget-root .ai-woo-sa-msg.user {
     align-self: flex-end !important;
-    background: var(--forest) !important;
-    color: var(--ivory) !important;
+    max-width: 86% !important;
+    background: var(--bone) !important;
+    color: var(--ink) !important;
+    border: 1px solid var(--hairline) !important;
     border-bottom-right-radius: 4px !important;
-    box-shadow: 0 2px 8px rgba(31, 42, 34, 0.12) !important;
+    box-shadow: none !important;
+}
+#ai-woo-sa-widget-root .ai-woo-sa-message-content {
+    font-family: var(--font-body);
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 1.7;
+    letter-spacing: normal;
+    text-align: left;
+    overflow-wrap: anywhere;
 }
 #ai-woo-sa-widget-root .ai-woo-sa-msg:not(.ai-woo-sa-msg-welcome) p {
-    margin: 0 0 6px 0 !important;
+    margin: 0 !important;
     font-size: 14px !important;
-    line-height: 1.75 !important;
+    line-height: 1.7 !important;
     color: inherit !important;
     font-family: var(--font-body) !important;
 }
 #ai-woo-sa-widget-root .ai-woo-sa-msg:not(.ai-woo-sa-msg-welcome) p:last-child { margin: 0 !important; }
+#ai-woo-sa-widget-root .ai-woo-sa-message-content > * + * {
+    margin-top: 12px !important;
+}
+#ai-woo-sa-widget-root .ai-woo-sa-msg:not(.ai-woo-sa-msg-welcome) .ai-woo-sa-message-content > p:not(:first-child) {
+    margin-top: 12px !important;
+}
+#ai-woo-sa-widget-root .ai-woo-sa-msg .ai-woo-sa-list {
+    display: block;
+    margin: 12px 0 0 !important;
+    padding: 0 0 0 1.3em !important;
+    list-style-position: outside !important;
+    font: inherit;
+    color: inherit;
+    text-align: left;
+}
+#ai-woo-sa-widget-root .ai-woo-sa-msg ul.ai-woo-sa-list { list-style-type: disc !important; }
+#ai-woo-sa-widget-root .ai-woo-sa-msg ol.ai-woo-sa-list { list-style-type: decimal !important; }
+#ai-woo-sa-widget-root .ai-woo-sa-msg .ai-woo-sa-list:first-child { margin-top: 0 !important; }
+#ai-woo-sa-widget-root .ai-woo-sa-msg .ai-woo-sa-list > li {
+    display: list-item;
+    margin: 0 !important;
+    padding: 0 0 0 .25em !important;
+    font: inherit;
+    color: inherit;
+    text-indent: 0;
+}
+#ai-woo-sa-widget-root .ai-woo-sa-msg .ai-woo-sa-list > li + li { margin-top: 7px !important; }
+#ai-woo-sa-widget-root .ai-woo-sa-msg .ai-woo-sa-list > li::marker { color: var(--sage-deep); }
+#ai-woo-sa-widget-root .ai-woo-sa-message-content strong { font-weight: 600; }
+#ai-woo-sa-widget-root .ai-woo-sa-text-link { color: var(--sage-deep); text-underline-offset: 3px; }
 #ai-woo-sa-widget-root .ai-woo-sa-time {
     display: block !important;
     font-size: 10px !important;
-    margin-top: 4px !important;
+    margin-top: 8px !important;
     text-align: right !important;
     color: var(--ink-soft) !important;
-    opacity: 0.8 !important;
 }
 #ai-woo-sa-widget-root .ai-woo-sa-msg.user .ai-woo-sa-time {
-    color: var(--ivory) !important;
-    opacity: 0.7 !important;
+    color: var(--ink-soft) !important;
 }
 /* Thinking Indicator */
 #ai-woo-sa-widget-root .ai-woo-sa-typing-container {

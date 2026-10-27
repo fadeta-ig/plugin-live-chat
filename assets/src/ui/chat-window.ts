@@ -41,13 +41,14 @@ export const closeChat = (): void => {
 };
 
 export const openChat = (): void => {
-    const { chatWindow, fabBtn } = getElements();
+    const { chatWindow, fabBtn, chatBody } = getElements();
     chatWindow.removeAttribute('inert');
     chatWindow.setAttribute('aria-hidden', 'false');
     chatWindow.classList.add('open');
     fabBtn.classList.add('open');
     fabBtn.setAttribute('aria-expanded', 'true');
     syncViewport();
+    if (chatBody.querySelector('.ai-woo-sa-welcome')) chatBody.scrollTop = 0;
     // Let visitors see the available help before opening the mobile keyboard.
     chatWindow.focus({ preventScroll: true });
     resetUnread();

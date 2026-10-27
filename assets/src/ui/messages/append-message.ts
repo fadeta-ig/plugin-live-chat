@@ -15,7 +15,7 @@ export const appendMessage = (
     const message = document.createElement('div');
     message.className = `ai-woo-sa-msg ${sender}${isWelcome ? ' ai-woo-sa-msg-welcome' : ''}`;
 
-    const bodyHtml = isRawHtml ? text : `<p>${renderPlainMessage(text)}</p>`;
+    const bodyHtml = isRawHtml ? text : `<div class="ai-woo-sa-message-content">${renderPlainMessage(text)}</div>`;
     const timeHtml = isWelcome ? '' : `<span class="ai-woo-sa-time">${formatClock(new Date())}</span>`;
     message.innerHTML = `${bodyHtml}${timeHtml}`;
     appendToChat(message);

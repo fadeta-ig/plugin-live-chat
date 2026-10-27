@@ -99,8 +99,11 @@
   #ai-woo-sa-widget-root .ai-woo-sa-welcome {
     padding: 0;
   }
-  #ai-woo-sa-widget-root .ai-woo-sa-welcome-badge {
-    margin-bottom: 10px;
+  #ai-woo-sa-widget-root .ai-woo-sa-welcome-intro {
+    padding-bottom: 16px;
+  }
+  #ai-woo-sa-widget-root .ai-woo-sa-welcome-wordmark {
+    margin-bottom: 12px;
   }
   #ai-woo-sa-widget-root .ai-woo-sa-welcome-title {
     font-size: 30px;
@@ -112,7 +115,7 @@
     margin-bottom: 16px;
   }
   #ai-woo-sa-widget-root .ai-woo-sa-starter-actions {
-    gap: 8px;
+    gap: 0;
   }
   #ai-woo-sa-widget-root .ai-woo-sa-starter-row {
     min-height: 60px;
