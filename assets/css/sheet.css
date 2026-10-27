@@ -1,93 +1,90 @@
-/* Custom Confirmation Modal / Sheet */
-.ai-woo-sa-confirm-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    background: rgba(31, 42, 34, 0.4);
-    backdrop-filter: blur(6px);
-    -webkit-backdrop-filter: blur(6px);
-    z-index: var(--z-overlay);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    opacity: 0;
-    visibility: hidden;
-    transition: opacity var(--transition-normal), visibility var(--transition-normal);
-    pointer-events: auto;
+#ai-woo-sa-widget-root .ai-woo-sa-confirm-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 30;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  background: rgba(31, 42, 34, .38);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity var(--transition-fast), visibility var(--transition-fast);
 }
-
-.ai-woo-sa-confirm-overlay.show {
-    opacity: 1;
-    visibility: visible;
+#ai-woo-sa-widget-root .ai-woo-sa-confirm-overlay.show {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
 }
-
-.ai-woo-sa-confirm-box {
-    background: var(--porcelain);
-    padding: 26px 28px;
-    border-radius: var(--radius-card);
-    width: 88%;
-    max-width: 320px;
-    box-shadow: var(--shadow-xl);
-    border: 1px solid var(--hairline);
-    text-align: center;
-    transform: scale(0.95) translateY(8px);
-    transition: transform var(--transition-normal);
+#ai-woo-sa-widget-root .ai-woo-sa-confirm-box {
+  width: 100%;
+  max-width: 344px;
+  max-height: 100%;
+  overflow-y: auto;
+  padding: 28px 24px 24px;
+  background: var(--porcelain);
+  border: 1px solid var(--hairline);
+  border-radius: 18px;
+  box-shadow: var(--shadow-xl);
+  text-align: left;
 }
-
-.ai-woo-sa-confirm-overlay.show .ai-woo-sa-confirm-box {
-    transform: scale(1) translateY(0);
+#ai-woo-sa-widget-root .ai-woo-sa-confirm-eyebrow {
+  display: block;
+  margin-bottom: 12px;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: .14em;
+  color: var(--champagne-deep);
+  text-transform: uppercase;
 }
-
-.ai-woo-sa-confirm-box h4 {
-    font-family: var(--font-display);
-    font-size: 20px;
-    font-weight: 600;
-    color: var(--ink);
-    margin-bottom: 8px;
+#ai-woo-sa-widget-root .ai-woo-sa-confirm-box h4 {
+  font-family: var(--font-display);
+  font-size: 28px;
+  font-weight: 600;
+  line-height: 1.2;
+  color: var(--ink);
+  margin-bottom: 12px;
+  letter-spacing: -.02em;
 }
-
-.ai-woo-sa-confirm-box p {
-    font-size: 13.5px;
-    color: var(--ink-soft);
-    line-height: 1.5;
-    margin-bottom: 22px;
+#ai-woo-sa-widget-root .ai-woo-sa-confirm-box p {
+  font-family: var(--font-body);
+  font-size: 13px;
+  color: var(--ink-soft);
+  line-height: 1.7;
+  margin-bottom: 24px;
 }
-
-.ai-woo-sa-confirm-actions {
-    display: flex;
-    gap: 10px;
+#ai-woo-sa-widget-root .ai-woo-sa-confirm-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
 }
-
-.ai-woo-sa-confirm-btn {
-    flex: 1;
-    padding: 10px 16px;
-    border-radius: var(--radius-pill);
-    font-size: 13px;
-    font-weight: 600;
-    cursor: pointer;
-    border: 1px solid transparent;
-    transition: all var(--transition-fast);
+#ai-woo-sa-widget-root .ai-woo-sa-confirm-btn {
+  flex: 1 1 110px;
+  min-height: 44px;
+  padding: 11px 14px;
+  border-radius: 10px;
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1.5;
+  cursor: pointer;
+  border: 1px solid var(--hairline);
+  transition: background-color var(--transition-fast);
 }
-
-.ai-woo-sa-confirm-btn.cancel {
-    background: var(--ivory);
-    color: var(--ink-soft);
-    border-color: var(--hairline);
+#ai-woo-sa-widget-root .ai-woo-sa-confirm-btn.cancel {
+  background: var(--porcelain);
+  color: var(--ink);
 }
-
-.ai-woo-sa-confirm-btn.cancel:hover {
-    background: var(--bone);
-    color: var(--ink);
+#ai-woo-sa-widget-root .ai-woo-sa-confirm-btn.cancel:hover {
+  background: var(--ivory);
 }
-
-.ai-woo-sa-confirm-btn.confirm {
-    background: var(--clay);
-    color: var(--ivory);
+#ai-woo-sa-widget-root .ai-woo-sa-confirm-btn.confirm {
+  background: var(--forest);
+  border-color: var(--forest);
+  color: var(--porcelain);
 }
-
-.ai-woo-sa-confirm-btn.confirm:hover {
-    background: var(--clay-hover);
-    transform: translateY(-1px);
+#ai-woo-sa-widget-root .ai-woo-sa-confirm-btn.confirm:hover {
+  background: var(--forest-hover);
 }

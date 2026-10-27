@@ -9,7 +9,7 @@ export const isScrolledUp = (): boolean => {
 
 export const updateJumpButton = (): void => {
     const { jumpBtn } = getElements();
-    jumpBtn.style.display = isScrolledUp() ? 'inline-flex' : 'none';
+    jumpBtn.style.display = !getElements().chatBody.querySelector('.ai-woo-sa-welcome') && isScrolledUp() ? 'inline-flex' : 'none';
 };
 
 export const scrollToBottom = (force = true): void => {
@@ -23,6 +23,9 @@ export const scrollToBottom = (force = true): void => {
 export const appendToChat = (node: HTMLElement, forceScroll = true): void => {
     const { chatBody } = getElements();
     const wasNearBottom = !isScrolledUp();
+    if (node.matches('.ai-woo-sa-msg.user')) {
+        chatBody.querySelector('.ai-woo-sa-msg-welcome')?.remove();
+    }
     chatBody.appendChild(node);
     if (forceScroll || wasNearBottom) {
         chatBody.scrollTop = chatBody.scrollHeight;

@@ -1,5 +1,5 @@
 /* 4-Step Mini Timeline for Order Receipt */
-.ai-woo-sa-timeline {
+#ai-woo-sa-widget-root .ai-woo-sa-timeline {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -8,7 +8,7 @@
     margin: 4px 0 6px;
 }
 
-.ai-woo-sa-timeline::before {
+#ai-woo-sa-widget-root .ai-woo-sa-timeline::before {
     content: '';
     position: absolute;
     top: 17px;
@@ -19,7 +19,7 @@
     z-index: 1;
 }
 
-.ai-woo-sa-timeline-step {
+#ai-woo-sa-widget-root .ai-woo-sa-timeline-step {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -28,7 +28,7 @@
     z-index: 2;
 }
 
-.ai-woo-sa-timeline-dot {
+#ai-woo-sa-widget-root .ai-woo-sa-timeline-dot {
     width: 14px;
     height: 14px;
     border-radius: 50%;
@@ -37,20 +37,20 @@
     transition: all var(--transition-fast);
 }
 
-.ai-woo-sa-timeline-step.completed .ai-woo-sa-timeline-dot,
-.ai-woo-sa-timeline-step.active .ai-woo-sa-timeline-dot {
+#ai-woo-sa-widget-root .ai-woo-sa-timeline-step.completed .ai-woo-sa-timeline-dot,
+#ai-woo-sa-widget-root .ai-woo-sa-timeline-step.active .ai-woo-sa-timeline-dot {
     border-color: var(--forest);
     background: var(--forest);
     box-shadow: 0 0 0 3px rgba(30, 58, 47, 0.12);
 }
 
-.ai-woo-sa-timeline-label {
+#ai-woo-sa-widget-root .ai-woo-sa-timeline-label {
     font-size: 10px;
     font-weight: 500;
     color: var(--ink-soft);
 }
 
-.ai-woo-sa-timeline-step.active .ai-woo-sa-timeline-label {
+#ai-woo-sa-widget-root .ai-woo-sa-timeline-step.active .ai-woo-sa-timeline-label {
     color: var(--forest);
     font-weight: 600;
 }

@@ -15,7 +15,7 @@ import { addToCart } from '../cart/add-to-cart';
 import { sendMessage } from '../chat/send-message';
 import { removeQuickReplies, renderQuickReplies } from '../quick-replies/quick-reply.controller';
 
-const RESET_CONFIRM_MESSAGE = 'Mulai obrolan baru dan hapus riwayat?';
+const RESET_CONFIRM_MESSAGE = 'Riwayat percakapan di perangkat ini akan dihapus. Anda bisa memulai kembali dengan pertanyaan baru.';
 
 const startNewConversation = (): void => {
     resetConversation();

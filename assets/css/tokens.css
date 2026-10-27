@@ -1,13 +1,13 @@
 /* Design Tokens - Botanical Atelier Palette & Typography */
 #ai-woo-sa-widget-root {
-    --ivory: #FAF7F2;
+    --ivory: #FAF8F4;
     --porcelain: #FFFFFF;
     --bone: #F1ECE3;
     --hairline: #E4DDD0;
     --hairline-champagne: rgba(183, 155, 106, 0.35);
 
     --ink: #1F2A22;
-    --ink-soft: #5B655D;
+    --ink-soft: #62685F;
     --forest: #2F3E34;
     --forest-hover: #243129;
     --sage: #8C9B81;
@@ -21,7 +21,7 @@
     --font-body: 'Manrope', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
 
-    --radius-window: 24px;
+    --radius-window: 22px;
     --radius-card: 16px;
     --radius-bubble: 18px;
     --radius-btn: 12px;

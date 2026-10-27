@@ -4,12 +4,12 @@
     position: absolute;
     bottom: 74px;
     right: 0;
-    width: 390px;
+    width: 420px;
     max-width: calc(100vw - 32px);
-    height: 610px;
-    max-height: calc(100vh - 104px);
-    background-color: #FAF7F2 !important;
-    background: #FAF7F2 !important;
+    height: 760px;
+    max-height: calc(100vh - 116px);
+    max-height: calc(100dvh - 116px);
+    background: var(--ivory) !important;
     border: 1px solid var(--hairline);
     border-radius: var(--radius-window);
     box-shadow: 0 16px 48px -8px rgba(31, 42, 34, 0.22), 0 4px 16px rgba(31, 42, 34, 0.08);
@@ -33,18 +33,27 @@
 /* Chat Body (Message stream container) */
 #ai-woo-sa-widget-root .ai-woo-sa-body {
     flex: 1 1 auto;
-    padding: 16px 16px 28px 16px;
+    min-height: 0;
+    padding: 24px 22px;
     overflow-y: auto;
+    overflow-x: hidden;
+    overscroll-behavior: contain;
+    scrollbar-gutter: stable;
     display: flex;
     flex-direction: column;
-    gap: 14px;
+    gap: 16px;
     background: transparent;
+}
+
+#ai-woo-sa-widget-root .ai-woo-sa-body > * {
+    flex-shrink: 0;
+    min-width: 0;
 }
 
 /* Jump to latest floating button */
 #ai-woo-sa-widget-root .ai-woo-sa-jump-btn {
     position: absolute;
-    bottom: 84px;
+    bottom: 122px;
     left: 50%;
     transform: translateX(-50%);
     display: inline-flex;
@@ -64,6 +73,6 @@
 }
 
 #ai-woo-sa-widget-root .ai-woo-sa-jump-btn:hover {
-    background: var(--forest-dark) !important;
+    background: var(--forest-hover) !important;
     transform: translateX(-50%) translateY(-2px);
 }

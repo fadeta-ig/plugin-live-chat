@@ -5,10 +5,13 @@ import { getConfig } from '../../core/config.store';
 import { buildWhatsAppUrl } from '../../utils/phone';
 import { CS_PREFILLED_MESSAGE, MISSING_CS_NUMBER_MESSAGE } from '../labels';
 import { buildWelcomeHtml } from './welcome-screen.template';
+import { getElements } from '../elements';
 
 const handleStarterAction = (action: string): void => {
     switch (action) {
         case 'products':
+            appendMessage('Temukan produk', 'user');
+            appendMessage('Perawatan apa yang Anda cari? Pilih kategori di bawah, atau tulis kebutuhan Anda.', 'bot');
             renderQuickReplies('categories');
             return;
         case 'consultation':
@@ -22,7 +25,7 @@ const handleStarterAction = (action: string): void => {
         case 'cs': {
             const { waNumber } = getConfig();
             if (waNumber) {
-                window.open(buildWhatsAppUrl(waNumber, CS_PREFILLED_MESSAGE), '_blank');
+                window.open(buildWhatsAppUrl(waNumber, CS_PREFILLED_MESSAGE), '_blank', 'noopener,noreferrer');
             } else {
                 appendMessage(MISSING_CS_NUMBER_MESSAGE, 'bot');
             }
@@ -43,4 +46,5 @@ export const bindWelcomeEvents = (container: HTMLElement): void => {
 export const appendWelcomeScreen = (save = true): void => {
     const html = `<div class="ai-woo-sa-welcome" id="ai-woo-sa-welcome">${buildWelcomeHtml()}</div>`;
     appendMessage(html, 'bot', save, true);
+    getElements().chatBody.scrollTop = 0;
 };

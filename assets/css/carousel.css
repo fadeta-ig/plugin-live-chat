@@ -1,5 +1,5 @@
 /* Product Carousel & Multi-Card Container */
-.ai-woo-sa-carousel {
+#ai-woo-sa-widget-root .ai-woo-sa-carousel {
     display: flex;
     gap: 12px;
     overflow-x: auto;
@@ -12,11 +12,11 @@
     animation: aiWooSaReveal var(--transition-normal);
 }
 
-.ai-woo-sa-carousel::-webkit-scrollbar {
+#ai-woo-sa-widget-root .ai-woo-sa-carousel::-webkit-scrollbar {
     display: none;
 }
 
-.ai-woo-sa-carousel .ai-woo-sa-product-card {
+#ai-woo-sa-widget-root .ai-woo-sa-carousel .ai-woo-sa-product-card {
     min-width: 220px;
     max-width: 220px;
     flex-shrink: 0;

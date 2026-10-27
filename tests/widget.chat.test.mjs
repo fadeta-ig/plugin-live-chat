@@ -12,18 +12,19 @@ const recommendationStream = () =>
     ]);
 
 describe('boot and navigation', () => {
-    it('mounts header, greeting and six quick replies', async () => {
+    it('offers a single welcome menu without duplicate quick replies', async () => {
         const widget = await bootWidget({ fetchHandler: () => jsonResponse({}) });
         assert.equal(widget.$('.ai-woo-sa-header h3').textContent, 'Shinyoung Assistant');
         assert.match(widget.$('.ai-woo-sa-welcome-title').textContent, /Selamat datang/);
         assert.equal(widget.$$('.ai-woo-sa-starter-row').length, 4);
-        assert.equal(widget.$$('.ai-woo-sa-qr-btn').length, 6);
+        assert.equal(widget.$$('.ai-woo-sa-qr-btn').length, 0);
         widget.close();
     });
 
     it('navigates submenus and static replies', async () => {
         const widget = await bootWidget({ fetchHandler: () => jsonResponse({}) });
-        clickQuickReply(widget, 'Produk Kami');
+        widget.$('[data-starter="products"]').click();
+        assert.equal(widget.$('.ai-woo-sa-welcome'), null);
         assert.equal(widget.$$('.ai-woo-sa-qr-btn').length, 4);
         clickQuickReply(widget, 'Kembali');
         assert.equal(widget.$$('.ai-woo-sa-qr-btn').length, 6);
@@ -70,8 +71,7 @@ describe('streaming reply', () => {
             fetchHandler: () => sseResponse([token('<img src=x onerror=alert(1)> aman')]),
         });
         sendText(widget, 'tes');
-        await waitFor(() => widget.$$('.ai-woo-sa-msg.bot').length >= 2);
-        await wait(100);
+        await waitFor(() => widget.$$('.ai-woo-sa-msg.bot').some((el) => el.textContent.includes('<img src=x onerror=alert(1)> aman')));
         assert.equal(widget.$('.ai-woo-sa-body img'), null);
         widget.close();
     });

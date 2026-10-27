@@ -7,23 +7,21 @@
     pointer-events: none;
     font-family: var(--font-body);
     font-size: 14px;
-    line-height: 1.55;
+    line-height: 1.6;
     color: var(--ink);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
 }
 
-#ai-woo-sa-widget-root *,
-#ai-woo-sa-widget-root *::before,
-#ai-woo-sa-widget-root *::after {
+#ai-woo-sa-widget-root :where(*),
+#ai-woo-sa-widget-root :where(*)::before,
+#ai-woo-sa-widget-root :where(*)::after {
     box-sizing: border-box !important;
     margin: 0;
     padding: 0;
 }
 
-#ai-woo-sa-widget-root button,
-#ai-woo-sa-widget-root input,
-#ai-woo-sa-widget-root textarea {
+#ai-woo-sa-widget-root :where(button, input, textarea) {
     font-family: var(--font-body);
     font-size: inherit;
     color: inherit;
@@ -34,6 +32,20 @@
     border: none;
     outline: none;
     box-shadow: none;
+    appearance: none;
+    min-width: 0;
+    margin: 0;
+}
+
+#ai-woo-sa-widget-root :where(h2, h3, h4, p) {
+    color: inherit;
+    text-transform: none;
+    overflow-wrap: anywhere;
+}
+
+#ai-woo-sa-widget-root svg {
+    display: block;
+    flex-shrink: 0;
 }
 
 #ai-woo-sa-widget-root button::before,
@@ -48,20 +60,20 @@
 }
 
 /* Custom Slim Scrollbar */
-.ai-woo-sa-body::-webkit-scrollbar {
+#ai-woo-sa-widget-root .ai-woo-sa-body::-webkit-scrollbar {
     width: 5px;
 }
 
-.ai-woo-sa-body::-webkit-scrollbar-track {
+#ai-woo-sa-widget-root .ai-woo-sa-body::-webkit-scrollbar-track {
     background: transparent;
 }
 
-.ai-woo-sa-body::-webkit-scrollbar-thumb {
+#ai-woo-sa-widget-root .ai-woo-sa-body::-webkit-scrollbar-thumb {
     background: rgba(31, 42, 34, 0.12);
     border-radius: var(--radius-pill);
 }
 
-.ai-woo-sa-body::-webkit-scrollbar-thumb:hover {
+#ai-woo-sa-widget-root .ai-woo-sa-body::-webkit-scrollbar-thumb:hover {
     background: rgba(31, 42, 34, 0.22);
 }
 

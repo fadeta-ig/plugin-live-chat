@@ -3,6 +3,7 @@ import { buildWhatsAppUrl } from '../../utils/phone';
 import { CS_PREFILLED_MESSAGE, MISSING_CS_NUMBER_MESSAGE } from '../../ui/labels';
 import { appendMessage } from '../../ui/messages/append-message';
 import { appendToChat } from '../../ui/message-list';
+import { getElements } from '../../ui/elements';
 import { sendMessage } from '../chat/send-message';
 import { QUICK_REPLY_MENUS } from './quick-reply.data';
 import type { QuickReplyButton, QuickReplyMenuId } from './quick-reply.types';
@@ -47,14 +48,19 @@ const handleQuickReply = (button: QuickReplyButton): void => {
 
 export const renderQuickReplies = (menuId: QuickReplyMenuId): void => {
     removeQuickReplies();
+    // The welcome screen already offers the primary actions.
+    if (menuId === 'initial' && getElements().chatBody.querySelector('.ai-woo-sa-welcome')) return;
 
     const container = document.createElement('div');
     container.className = 'ai-woo-sa-quick-replies';
     container.id = CONTAINER_ID;
+    container.setAttribute('role', 'group');
+    container.setAttribute('aria-label', 'Pilih langkah berikutnya');
 
     QUICK_REPLY_MENUS[menuId].forEach((button) => {
         const element = document.createElement('button');
         element.className = 'ai-woo-sa-qr-btn';
+        element.type = 'button';
         element.textContent = button.label;
         element.addEventListener('click', () => handleQuickReply(button));
         container.appendChild(element);

@@ -1,6 +1,6 @@
 /* External Action Buttons (WhatsApp & Order Tracking) */
-.ai-woo-sa-btn-wa,
-.ai-woo-sa-btn-tracking {
+#ai-woo-sa-widget-root .ai-woo-sa-btn-wa,
+#ai-woo-sa-widget-root .ai-woo-sa-btn-tracking {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -15,13 +15,13 @@
     transition: background-color var(--transition-fast), transform var(--transition-fast);
 }
 
-.ai-woo-sa-btn-wa:hover,
-.ai-woo-sa-btn-tracking:hover {
+#ai-woo-sa-widget-root .ai-woo-sa-btn-wa:hover,
+#ai-woo-sa-widget-root .ai-woo-sa-btn-tracking:hover {
     background: var(--forest-hover);
     transform: translateY(-1px);
 }
 
-.ai-woo-sa-btn-link {
+#ai-woo-sa-widget-root .ai-woo-sa-btn-link {
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -35,12 +35,12 @@
     transition: border-color var(--transition-fast), background var(--transition-fast);
 }
 
-.ai-woo-sa-btn-link:hover {
+#ai-woo-sa-widget-root .ai-woo-sa-btn-link:hover {
     border-color: var(--champagne);
     background: var(--ivory);
 }
 
-.ai-woo-sa-btn-spinner {
+#ai-woo-sa-widget-root .ai-woo-sa-btn-spinner {
     width: 12px;
     height: 12px;
     border: 2px solid rgba(255, 255, 255, 0.4);
@@ -52,7 +52,7 @@
 @keyframes aiWooSaSpin { to { transform: rotate(360deg); } }
 
 /* Inline Error Retry Banner */
-.ai-woo-sa-error-banner {
+#ai-woo-sa-widget-root .ai-woo-sa-error-banner {
     display: flex;
     flex-direction: column;
     gap: 8px;
@@ -65,7 +65,7 @@
     animation: aiWooSaReveal var(--transition-normal);
 }
 
-.ai-woo-sa-btn-retry {
+#ai-woo-sa-widget-root .ai-woo-sa-btn-retry {
     align-self: flex-start;
     display: inline-flex;
     align-items: center;
@@ -81,6 +81,6 @@
     transition: opacity var(--transition-fast);
 }
 
-.ai-woo-sa-btn-retry:hover {
+#ai-woo-sa-widget-root .ai-woo-sa-btn-retry:hover {
     opacity: 0.9;
 }

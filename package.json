@@ -1,6 +1,6 @@
 {
   "name": "ai-woo-sales-assistant-widget",
-  "version": "2.7.6",
+  "version": "2.7.8",
   "private": true,
   "description": "Frontend widget source (TypeScript) for the AI WooCommerce Sales Assistant plugin.",
   "scripts": {
@@ -8,7 +8,8 @@
     "build": "node scripts/build.mjs",
     "watch": "node scripts/build.mjs --watch",
     "check": "npm run typecheck && npm run build",
-    "test": "npm run build && node --test \"tests/**/*.test.mjs\""
+    "test": "npm run build && node --test \"tests/**/*.test.mjs\"",
+    "preview": "node scripts/preview.mjs"
   },
   "devDependencies": {
     "esbuild": "^0.24.0",
